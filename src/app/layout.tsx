@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
+import { ViewTransitions } from "next-view-transitions";
+import Navbar from "@/components/navbar/Navbar";
+
+const loveLight = Love_Light({
+  variable: "--font-love-light",
+  subsets: ["latin"],
+  weight: "400",
+})
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: "400",
+})
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +37,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body
+          className={`font-inter antialiased`}
+        >
+          <Navbar />
+          {children}
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
