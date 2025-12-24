@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
@@ -12,8 +16,7 @@ const loveLight = Love_Light({
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: "400",
+  subsets: ["latin"]
 })
 
 const geistSans = Geist({

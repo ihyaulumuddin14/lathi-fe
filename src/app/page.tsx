@@ -8,8 +8,8 @@ import Footer from "@/app/(home-sections)/Footer";
 
 export default function Home() {
   return (
-    <main className="w-full h-fit border-10 border-t-0 text-center min-h-screen relative">
-      <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10"/>
+    <main className="w-full h-fit text-center min-h-screen relative overflow-x-hidden">
+      <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10 z-0"/>
       <Hero />
       <Features />
       <Problem />

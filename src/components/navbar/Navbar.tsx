@@ -6,7 +6,9 @@ import { usePathname } from 'next/navigation'
 import HamburgerMenu from '../HamburgerMenu'
 import { useWindowWidth } from '@/hooks/useWindowWidth'
 import { Button } from '@/components/ui/button'
-import { gsap, useGSAP, ScrollTrigger } from "@/utils/gsap-util"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -52,8 +54,8 @@ const MainNavbar = () => {
   }, [])
 
   return (
-    <div className='flex justify-between items-center'>
-      { width < 640 ? 
+    <div className='flex justify-between items-center text-blend-difference'>
+      { width! < 640 ? 
         (
           <HamburgerMenu />
         ) : ( <>

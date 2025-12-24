@@ -24,7 +24,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
     lenis.start()
 
     function raf(time: number) {
-      lenis.raf(time*1.5)
+      lenis.raf(time*0.9)
       requestAnimationFrame(raf)
     }
 
@@ -40,7 +40,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
       window.removeEventListener("load", run)
       lenis.destroy()
     }
-  }, [])
+  }, [pathname])
 
   return (
     <div>
