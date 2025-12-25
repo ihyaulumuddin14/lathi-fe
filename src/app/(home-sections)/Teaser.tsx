@@ -1,12 +1,11 @@
 'use client'
 
-import Image from "next/image"
-import gsap from "gsap"
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
-import { title } from "process";
+import Image from "next/image";
+import { useRef } from "react";
 
 const Teaser = () => {
   const teaserTitleRef = useRef<HTMLHeadingElement>(null)

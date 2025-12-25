@@ -1,20 +1,20 @@
 'use client'
 
-import Image from 'next/image'
-import TransitionLink from '../TransitionLink'
-import { usePathname } from 'next/navigation'
-import HamburgerMenu from '../HamburgerMenu'
-import { useWindowWidth } from '@/hooks/useWindowWidth'
-import { Button } from '@/components/ui/button'
-import gsap from "gsap"
 import { useGSAP } from "@gsap/react"
+import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import HamburgerMenu from '../HamburgerMenu'
+import MainButton from '../MainButton'
+import TransitionLink from '../TransitionLink'
 
 export default function Navbar() {
   const pathname = usePathname()
 
   return (
-    <nav id='navbar' className='w-full h-fit bg-transparent py-3 px-10 fixed top-0 left-0 z-40'>
+    <nav id='navbar' className='w-full h-fit bg-transparent py-3 sm:py-1 px-7 sm:px-10 fixed top-0 left-0 z-40'>
       {pathname === '/play' ? <PlayNavbar /> : <MainNavbar />}
     </nav>
   )
@@ -23,7 +23,7 @@ export default function Navbar() {
 
 const PlayNavbar = () => {
   return (
-    <ul className='flex justify-between'>
+    <ul className='flex justify-between items-center'>
       <HamburgerMenu />
 
       <h1>Sowan Calon Mertua</h1>
@@ -36,44 +36,64 @@ const PlayNavbar = () => {
 }
 
 const MainNavbar = () => {
-  const width = useWindowWidth()
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
 
-  useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger)
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
 
-    gsap.to("#navbar", {
-      scrollTrigger: {
-        trigger: "#features",
-        start: "top top",
-        end: "25% top",
-        scrub: true
-      },
-      backgroundColor: "var(--background)",
-      ease: "none",
-    })
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
   }, [])
+  
+  useGSAP(() => {
+    const run = () => {
+      gsap.registerPlugin(ScrollTrigger)
+      
+      gsap.to("#navbar", {
+        scrollTrigger: {
+          trigger: "#features",
+          start: "top top",
+          end: "25% top",
+          scrub: true
+        },
+        backgroundColor: "var(--background)",
+        ease: "none",
+      })
+    }
+    
+    if (typeof window !== undefined) {
+      run()
+    }
+  }, [])
+  
+  if (isMobile === null) return null
 
   return (
     <div className='flex justify-between items-center text-blend-difference'>
-      { width! < 640 ? 
+      { isMobile ? 
         (
           <HamburgerMenu />
         ) : ( <>
-          <TransitionLink href={"/"}>
-            <Image src={"/logo.png"} width={40} height={40} alt="Logo" className='rounded-full border'/>
+          <TransitionLink href={"/"} componentType='button-outline'>
+            <Image src={"/logo.png"} width={50} height={50} alt="Logo" className='rounded-full border'/>
           </TransitionLink>
 
           <ul className='flex gap-10'>
-            <TransitionLink transitionType="page" href={"/play"}>Lakon</TransitionLink>
             <TransitionLink href={"/collection"}>Bausastra Saku</TransitionLink>
+            <TransitionLink href={"/leaderboard"}>Papan Peringkat</TransitionLink>
             <TransitionLink href={"/profile"}>Profil</TransitionLink>
           </ul>
         </>
         )
       }
 
-
-      <Button>Sign in</Button>
+      <div className='w-fit flex gap-2'>
+        <MainButton variant="primary">Log in</MainButton>
+        <MainButton variant="outline">Sign in</MainButton>
+      </div>
     </div>
   )
 }

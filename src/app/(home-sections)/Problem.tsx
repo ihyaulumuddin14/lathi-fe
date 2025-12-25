@@ -30,7 +30,7 @@ const Problem = () => {
         type: "lines"
       })
 
-      if (window !== undefined) {
+      if (typeof window !== undefined) {
         gsap.fromTo(".problem-image-wrapper", {
           yPercent: 0
         }, {

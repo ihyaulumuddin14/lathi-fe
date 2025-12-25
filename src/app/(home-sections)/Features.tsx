@@ -4,12 +4,8 @@
 
 'use client'
 
-import { AnimatePresence, motion } from "motion/react";
-import gsap from "gsap"
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card"
+import TransitionLink from "@/components/TransitionLink";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -17,9 +13,13 @@ import {
   // CarouselNext,
   // CarouselPrevious,
   type CarouselApi,
-} from "@/components/ui/carousel"
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/carousel";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 const features = [
   {
@@ -66,7 +66,6 @@ const Features = () => {
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, SplitText)
 
-    // const timeline = gsap.timeline()
     const fadeText = SplitText.create(fadeTextRef.current, {
       type: "chars"
     })
@@ -157,7 +156,7 @@ const Features = () => {
           </div>
         </main>
         
-        <footer className="z-1 w-full h-full flex-1 flex sm:flex-row flex-col justify-between">
+        <footer className="z-1 w-full h-full flex-1 flex sm:flex-row flex-col justify-between overflow-visible">
           <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-3xl p-6">
             <motion.p
                key={features[current - 1]?.description}
@@ -168,9 +167,9 @@ const Features = () => {
                className="text-primary-foreground text-sm md:text-md lg:text-lg h-25 sm:h-30" >
                   {features[current - 1]?.description}
             </motion.p>
-            <Button className="bg-primary-foreground text-primary">Buka Halaman</Button>
+            <TransitionLink href={features[current - 1]?.url} transitionType={features[current - 1]?.url ? "page" : "template"} componentType="button-secondary">Buka Halaman</TransitionLink>
           </div>
-          <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10%">FITUR</h1>
+          <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10% overflow-visible">FITUR</h1>
         </footer>
       </div>
     </section>

@@ -4,14 +4,19 @@ import { animatePageOut } from '@/utils/animation'
 import { LinkProps } from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTransitionRouter } from 'next-view-transitions'
+import NavigationLink from './NavigationLink'
+import MainButton from './MainButton'
 
 interface TransitionLinkProps extends LinkProps {
   href: string,
   children: React.ReactNode,
-  transitionType?: "template" | "page"
+  transitionType?: "template" | "page",
+  componentType?: "link" | "button-primary" | "button-secondary" | "button-outline",
+  className?: string,
+  up?: string
 }
 
-const TransitionLink = ({ href, children, transitionType = "template" }: TransitionLinkProps) => {
+const TransitionLink = ({ up, href, children, transitionType = "template", componentType = "link", className }: TransitionLinkProps) => {
   const router = useRouter()
   const transitionRouter = useTransitionRouter()
   const pathname = usePathname()
@@ -31,14 +36,47 @@ const TransitionLink = ({ href, children, transitionType = "template" }: Transit
     }
   }
 
-  return (
-    <button
-      className='text-neutral-950 hover:text-neutral-600 uppercase'
-      onClick={handleClick}
-      >
-        {children}
-    </button>
-  )
+  if (componentType === "link") {
+    return (
+      <NavigationLink
+        className={className + " cursor-pointer"}
+        onClick={handleClick}
+        >
+          {children}
+      </NavigationLink>
+    )
+  } else if (componentType === "button-primary") {
+    return (
+      <MainButton
+        up={up}
+        variant="primary"
+        onClick={handleClick}
+        className={className}>
+          {children}
+      </MainButton>
+    )
+  } else if (componentType === "button-secondary") {
+    return (
+      <MainButton
+        up={up}
+        variant="secondary"
+        onClick={handleClick}
+        className={className}>
+          {children}
+      </MainButton>
+    )
+
+  } else if (componentType === "button-outline") {
+    return (
+      <MainButton
+        up={up}
+        variant="outline"
+        onClick={handleClick}
+        className={className}>
+          {children}
+      </MainButton>
+    )
+  }
 }
 
 

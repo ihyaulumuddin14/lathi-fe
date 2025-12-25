@@ -1,12 +1,11 @@
 'use client'
 
-import Link from "next/link";
-import gsap from "gsap";
+import TransitionLink from "@/components/TransitionLink";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import gsap from "gsap";
 import { ChevronLast } from "lucide-react";
 import Image from "next/image";
+import { useRef } from "react";
 
 const listLinkShortcut = [
   {
@@ -81,7 +80,15 @@ const Footer = () => {
         </h1>
         <ul className="text-primary-foreground w-full flex flex-col justify-end items-start gap-0 lg:gap-1 p-5 sm:px-5 sm:py-0 border-y sm:border-0">
           {listLinkShortcut.map((link, index) => (
-            <Link className="uppercase text-md sm:text-lg md:text-xl lg:text-2xl" key={index} href={link.url}>{link.title}</Link>
+            <TransitionLink
+              up="group-hover:-translate-y-[1.4em]"
+              componentType="button-primary"
+              transitionType={link.url === "/play" ? "page" : "template"}
+              className="uppercase text-md sm:text-lg md:text-xl lg:text-2xl py-[0em] scale-100 hover:scale-100 active:scale-100"
+              key={index}
+              href={link.url}>
+                {link.title}
+            </TransitionLink>
           ))}
         </ul>
         <p className="text-primary-foreground tracking-widest sm:col-span-2">Copyright &copy; 2025 Lathi</p>
@@ -93,16 +100,24 @@ const Footer = () => {
           Meet the Team
         </header>
 
-        <main className="w-full flex sm:flex-row flex-col gap-5 text-left justify-center items-center">
-          <div className="w-fit h-fit img-team">
-            <Image src={"/ulum-photo.webp"} width={200} height={300} alt="developer_photo" className="saturate-50"/>
-            <h3 className="font-extrabold mt-3">Ihya' Ulumuddin</h3>
-            <p>Frontend Developer</p>
+        <main className="w-full grid grid-cols-[1fr] sm:grid-cols-[1fr_1fr] gap-5 text-left justify-center items-center">
+          <div className="w-full h-fit img-team flex gap-3">
+            <div className="relative w-full aspect-4/5">
+              <Image src={"/ulum-photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
+            </div>
+            <div className="w-full">
+              <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Ihya&apos; Ulumuddin</h3>
+              <p className="text-md lg:text-xl leading-10">Frontend Developer</p>
+            </div>
           </div>
-          <div className="w-fit h-fit img-team">
-            <Image src={"/ulum-photo.webp"} width={200} height={300} alt="developer_photo" className="saturate-50"/>
-            <h3 className="font-extrabold mt-3">M. Hafizh Faiqunnabil</h3>
-            <p>Backend Developer</p>
+          <div className="w-full h-fit img-team flex gap-3">
+            <div className="relative w-full aspect-4/5">
+              <Image src={"/abil-photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
+            </div>
+            <div className="w-full">
+              <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Muhammad Hafizh Faiqunnabil</h3>
+              <p className="text-md lg:text-xl leading-10">Backend Developer</p>
+            </div>
           </div>
         </main>
       </article>
