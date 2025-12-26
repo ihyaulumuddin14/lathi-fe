@@ -69,8 +69,6 @@ const Features = () => {
     const fadeText = SplitText.create(fadeTextRef.current, {
       type: "chars"
     })
-
-    console.log(fadeText)
     
     gsap.fromTo(".first-section", {
       scale: 0.9,
@@ -167,7 +165,7 @@ const Features = () => {
                className="text-primary-foreground text-sm md:text-md lg:text-lg h-25 sm:h-30" >
                   {features[current - 1]?.description}
             </motion.p>
-            <TransitionLink href={features[current - 1]?.url} transitionType={features[current - 1]?.url ? "page" : "template"} componentType="button-secondary">Buka Halaman</TransitionLink>
+            <TransitionLink href={features[current - 1]?.url} transitionType={features[current - 1]?.url === "/play" ? "page" : "template"} componentType="button-secondary">Buka Halaman</TransitionLink>
           </div>
           <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10% overflow-visible">FITUR</h1>
         </footer>

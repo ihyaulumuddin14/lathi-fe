@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Love+Light&display=swap');
 @import "tailwindcss";
-/* @import "tw-animate-css"; */
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -79,7 +79,7 @@
   --secondary: #F2EAD3;
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: #737373;
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -175,3 +175,46 @@
   font-weight: 400;
   font-style: normal;
 }
+
+/* .button-style {
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3), 0 3px 3px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.button-style:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3), 0 0px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+} */
+
+
+.pushable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.25);
+  transform: translateY(3px);
+  z-index: -1;
+
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.pushable:active {
+  transform: translateY(3px);
+}
+
+.pushable:active::after {
+  transform: translateY(0);
+  opacity: 0;
+}
+/* 
+.pushable:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pushable,
+  .pushable::after {
+    transition: none;
+  }
+} */

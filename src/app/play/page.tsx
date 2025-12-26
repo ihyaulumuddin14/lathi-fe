@@ -1,8 +1,11 @@
 import React from 'react'
+import ProtectedRoute from '../ProtectedRoute'
 
 const Play = () => {
   return (
-    <div className='min-h-screen bg-white'>Lakon</div>
+    <ProtectedRoute>
+      <div className='min-h-screen bg-white'>Lakon</div>
+    </ProtectedRoute>
   )
 }
 

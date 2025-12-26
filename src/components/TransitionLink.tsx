@@ -6,6 +6,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useTransitionRouter } from 'next-view-transitions'
 import NavigationLink from './NavigationLink'
 import MainButton from './MainButton'
+import { useAuth } from '@/stores/useAuth'
+import { useAlertDialog } from '@/stores/useAlertDialog'
+
+const protectedRouteLists = [
+  "/play"
+]
 
 interface TransitionLinkProps extends LinkProps {
   href: string,
@@ -14,16 +20,26 @@ interface TransitionLinkProps extends LinkProps {
   componentType?: "link" | "button-primary" | "button-secondary" | "button-outline",
   className?: string,
   up?: string
+  onClick?: () => void
 }
 
-const TransitionLink = ({ up, href, children, transitionType = "template", componentType = "link", className }: TransitionLinkProps) => {
+const TransitionLink = ({ onClick, up, href, children, transitionType = "template", componentType = "link", className }: TransitionLinkProps) => {
   const router = useRouter()
   const transitionRouter = useTransitionRouter()
   const pathname = usePathname()
+  const { user, accessToken } = useAuth()
+  const { setAlertDialogType } = useAlertDialog()
 
   const handleClick = () => {
     if (href !== pathname) {
-
+      
+      if (protectedRouteLists.includes(href)) {
+        if (!user || !accessToken) {
+          setAlertDialogType("login")
+          return
+        }
+      }
+      
       if (transitionType === "template") {
         animatePageOut(href, router)
       } else {
@@ -33,6 +49,8 @@ const TransitionLink = ({ up, href, children, transitionType = "template", compo
           }
         })
       }
+      
+      onClick && onClick()
     }
   }
 

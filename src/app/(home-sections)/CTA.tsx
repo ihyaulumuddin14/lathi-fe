@@ -81,7 +81,7 @@ const CTA = () => {
       <header className="flex flex-col gap-6">
         <h1 className="uppercase text-left flex gap-2">
           <ChevronLast />
-          Our Vision
+          Visi Kami
         </h1>
         <h2
           ref={CTATitleRef}
@@ -100,7 +100,7 @@ const CTA = () => {
             <br />
             <br />
             Temukan kata-kata tersembunyi, naikkan level sosialmu, dan jadilah
-            pemuncak di <strong>Leaderboard </strong>
+            pemuncak di <strong>Papan Peringkat </strong>
             minggu ini.
           </p>
 

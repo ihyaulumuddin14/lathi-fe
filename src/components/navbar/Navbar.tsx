@@ -5,16 +5,19 @@ import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import HamburgerMenu from '../HamburgerMenu'
 import MainButton from '../MainButton'
 import TransitionLink from '../TransitionLink'
+import { useAlertDialog } from "@/stores/useAlertDialog"
+import { useMenu } from "@/stores/useMenu"
 
 export default function Navbar() {
   const pathname = usePathname()
+  const { isOpenMenu } = useMenu()
 
   return (
-    <nav id='navbar' className='w-full h-fit bg-transparent py-3 sm:py-1 px-7 sm:px-10 fixed top-0 left-0 z-40'>
+    <nav id='navbar' className={`w-full h-fit ${isOpenMenu ? 'bg-background' : 'bg-transparent'} transition-all duration-300 ease-in-out fixed top-0 left-0 z-50`}>
       {pathname === '/play' ? <PlayNavbar /> : <MainNavbar />}
     </nav>
   )
@@ -22,9 +25,11 @@ export default function Navbar() {
 
 
 const PlayNavbar = () => {
+  const { isOpenMenu, setIsOpenMenu } = useMenu()
+
   return (
-    <ul className='flex justify-between items-center'>
-      <HamburgerMenu />
+    <ul className='w-full flex justify-between items-center py-3 sm:py-1 px-7 sm:px-10'>
+      <HamburgerMenu isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
 
       <h1>Sowan Calon Mertua</h1>
 
@@ -37,10 +42,13 @@ const PlayNavbar = () => {
 
 const MainNavbar = () => {
   const [isMobile, setIsMobile] = useState<boolean | null>(null)
+  const { setAlertDialogType } = useAlertDialog()
+  const { isOpenMenu, setIsOpenMenu } = useMenu()
+  const navRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const check = () => {
-      setIsMobile(window.innerWidth < 640)
+      setIsMobile(window.innerWidth < 768)
     }
 
     check()
@@ -52,7 +60,7 @@ const MainNavbar = () => {
     const run = () => {
       gsap.registerPlugin(ScrollTrigger)
       
-      gsap.to("#navbar", {
+      gsap.to(navRef.current, {
         scrollTrigger: {
           trigger: "#features",
           start: "top top",
@@ -64,25 +72,23 @@ const MainNavbar = () => {
       })
     }
     
-    if (typeof window !== undefined) {
-      run()
-    }
-  }, [])
+    run()
+  }, [isMobile])
   
   if (isMobile === null) return null
 
   return (
-    <div className='flex justify-between items-center text-blend-difference'>
+    <div ref={navRef} className='w-full flex justify-between items-center text-blend-difference py-3 px-7 sm:px-10'>
       { isMobile ? 
         (
-          <HamburgerMenu />
+          <HamburgerMenu isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
         ) : ( <>
-          <TransitionLink href={"/"} componentType='button-outline'>
-            <Image src={"/logo.png"} width={50} height={50} alt="Logo" className='rounded-full border'/>
+          <TransitionLink href={"/"} componentType='button-outline' className="py-[0em]">
+            <Image src={"/logo.png"} width={40} height={40} alt="Logo" className='rounded-full border'/>
           </TransitionLink>
 
           <ul className='flex gap-10'>
-            <TransitionLink href={"/collection"}>Bausastra Saku</TransitionLink>
+            <TransitionLink href={"/collection"}>Koleksi Kata</TransitionLink>
             <TransitionLink href={"/leaderboard"}>Papan Peringkat</TransitionLink>
             <TransitionLink href={"/profile"}>Profil</TransitionLink>
           </ul>
@@ -91,8 +97,8 @@ const MainNavbar = () => {
       }
 
       <div className='w-fit flex gap-2'>
-        <MainButton variant="primary">Log in</MainButton>
-        <MainButton variant="outline">Sign in</MainButton>
+        <MainButton variant="primary" onClick={() => setAlertDialogType("login")}>Masuk</MainButton>
+        <MainButton variant="outline" onClick={() => setAlertDialogType("register")}>Daftar</MainButton>
       </div>
     </div>
   )

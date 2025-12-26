@@ -8,7 +8,6 @@ import { Mouse } from "lucide-react";
 import { useRef } from "react";
 
 const Hero = () => {
-
   const heroTitleRef = useRef(null)
   const heroParagraphRef = useRef(null)
 
@@ -61,7 +60,7 @@ const Hero = () => {
           </h1>
         </div>
         <div className="w-full h-fit flex justify-center md:justify-start order-3 md:order-2 mt-10 md:mt-0 pb-10">
-          <TransitionLink transitionType="page" href="/play" componentType="button-primary" className="hero-play-button rounded-xl text-[clamp(1.8rem,3vw,4rem)]">
+          <TransitionLink transitionType="page" href="/play" componentType="button-primary" className="hero-play-button rounded-xl text-[clamp(1.8rem,3vw,3.5rem)]">
             Mulai Lakon
           </TransitionLink>
         </div>
@@ -69,7 +68,7 @@ const Hero = () => {
           <p ref={heroParagraphRef} className="w-full max-w-lg md:pl-20">
             Simulasi interaktif untuk menaklukkan Bahasa Jawa Krama Inggil.
             Ubah rasa canggungmu menjadi <i>unggah-ungguh</i> yang berkelas.
-            <strong> Aja dadi &quot;Wong Jawa sing ilang Jawane&quot;</strong>
+            <i><strong> Aja dadi &quot;Wong Jawa sing ilang Jawane&quot;</strong></i>
           </p>
         </div>
       </div>
@@ -78,8 +77,6 @@ const Hero = () => {
         onClick={() => {
           if (typeof window !== undefined) {
             window.scrollTo({ top: 1750, behavior: "smooth" });
-          } else {
-            console.log("window is not defined")
           }
         }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce overflow-visible flex flex-col items-center gap-1"

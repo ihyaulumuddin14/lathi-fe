@@ -7,7 +7,7 @@ import { ChevronLast } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
 
-const listLinkShortcut = [
+export const listLinkShortcut = [
   {
     title: "Beranda",
     url: "/",
@@ -17,11 +17,11 @@ const listLinkShortcut = [
     url: "/play",
   },
   {
-    title: "Bausastra Saku",
+    title: "Koleksi Kata",
     url: "/collection",
   },
   {
-    title: "Leaderboard",
+    title: "Papan Peringkat",
     url: "/leaderboard",
   },
   {
@@ -97,7 +97,7 @@ const Footer = () => {
       <article id="team" className="w-full h-fit p-[3vw] flex flex-col gap-5">
         <header className="little-title uppercase text-left flex gap-2">
           <ChevronLast />
-          Meet the Team
+          Tim Pengembang
         </header>
 
         <main className="w-full grid grid-cols-[1fr] sm:grid-cols-[1fr_1fr] gap-5 text-left justify-center items-center">
