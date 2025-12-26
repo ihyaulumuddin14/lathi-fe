@@ -33,6 +33,8 @@ const TransitionLink = ({ onClick, up, href, children, transitionType = "templat
   const handleClick = () => {
     if (href !== pathname) {
       
+      onClick && onClick()
+      
       if (protectedRouteLists.includes(href)) {
         if (!user || !accessToken) {
           setAlertDialogType("login")
@@ -50,7 +52,6 @@ const TransitionLink = ({ onClick, up, href, children, transitionType = "templat
         })
       }
       
-      onClick && onClick()
     }
   }
 

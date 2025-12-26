@@ -6,9 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import HamburgerMenu from '../HamburgerMenu'
-import MainButton from '../MainButton'
-import TransitionLink from '../TransitionLink'
+import HamburgerMenu from './HamburgerMenu'
+import MainButton from './MainButton'
+import TransitionLink from './TransitionLink'
 import { useAlertDialog } from "@/stores/useAlertDialog"
 import { useMenu } from "@/stores/useMenu"
 
@@ -84,7 +84,7 @@ const MainNavbar = () => {
           <HamburgerMenu isOpenMenu={isOpenMenu} setIsOpenMenu={setIsOpenMenu} />
         ) : ( <>
           <TransitionLink href={"/"} componentType='button-outline' className="py-[0em]">
-            <Image src={"/logo.png"} width={40} height={40} alt="Logo" className='rounded-full border'/>
+            <Image src={"/logo.png"} width={40} height={40} alt="Logo" className='rounded-full hover:scale-110 duration-75 transition-all ease-in-out'/>
           </TransitionLink>
 
           <ul className='flex gap-10'>

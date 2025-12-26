@@ -6,7 +6,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
 import { ViewTransitions } from "next-view-transitions";
-import Navbar from "@/components/navbar/Navbar";
+import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/sonner"
 
 const loveLight = Love_Light({
   variable: "--font-love-light",
@@ -45,6 +46,7 @@ export default function RootLayout({
         <body
           className={`font-inter antialiased`}
         >
+          <Toaster position="top-center"/>
           <Navbar />
           {children}
         </body>
