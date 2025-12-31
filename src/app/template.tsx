@@ -1,72 +1,90 @@
-'use client'
+"use client";
 
+import AlertDialogIntercept from "@/components/AlertDialogIntercept";
+import MenuOverlay from "@/components/MenuOverlay";
+// import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept"
+import { animatePageIn } from "@/utils/animation";
+import Lenis from "lenis";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
-import AlertDialogIntercept from "@/components/AlertDialogIntercept"
-import MenuOverlay from "@/components/MenuOverlay"
-import { useAlertDialog } from "@/stores/useAlertDialog"
-import { animatePageIn, notAnimatePageIn } from "@/utils/animation"
-import Lenis from "lenis"
-import { usePathname } from "next/navigation"
-import { useEffect } from "react"
-import { useShallow } from "zustand/shallow"
+const notAnimatePageIn = ["/play/chapters", "/play/rules"];
 
 const Template = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname()
-  const { open, onOpenChange } = useAlertDialog(
-    useShallow(state => ({
-      open: state.open,
-      onOpenChange: state.onOpenChange
-    }))
-  )
+  const pathname = usePathname();
+  // const { open } = useAlertDialogIntercept()
 
   useEffect(() => {
     const run = () => {
-      if (pathname === '/play') {
-        notAnimatePageIn()
+      if (notAnimatePageIn.includes(pathname)) {
+        animatePageIn({ animate: "none" });
+      } else if (pathname.startsWith("/play")) {
+        animatePageIn({ animate: "fade" });
       } else {
-        animatePageIn()
+        animatePageIn({ animate: "stagger" });
       }
+    };
+
+    // Disable Lenis for routes that need native scrolling (nested scroll containers)
+    const shouldDisableLenis = notAnimatePageIn.includes(pathname);
+    
+    let lenis: Lenis | null = null;
+    let rafId: number | null = null;
+
+    if (!shouldDisableLenis) {
+      lenis = new Lenis();
+      lenis.start();
+      
+      function raf(time: number) {
+        if (lenis) {
+          lenis.raf(time * 0.9);
+          rafId = requestAnimationFrame(raf);
+        }
+      }
+
+      rafId = requestAnimationFrame(raf);
     }
 
-    const lenis = new Lenis()
-
-    if (open) {
-      lenis.stop()
+    if (document.readyState === "complete") {
+      run();
     } else {
-      lenis.start()
-      if (document.readyState === "complete") {
-        run()
-      } else {
-        window.addEventListener("load", run)
-      }
+      window.addEventListener("load", run);
     }
-
-    function raf(time: number) {
-      lenis.raf(time*0.9)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
 
     return () => {
-      window.removeEventListener("load", run)
-      lenis.destroy()
-    }
-  }, [pathname, open, onOpenChange])
+      window.removeEventListener("load", run);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      if (lenis) {
+        lenis.destroy();
+      }
+    };
+  }, [pathname]);
 
   return (
     <div>
-      <AlertDialogIntercept />
       <MenuOverlay />
 
-      <div id='banner-1' className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-0 w-1/4"/>
-      <div id='banner-2' className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-1/4 w-1/4"/>
-      <div id='banner-3' className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-2/4 w-1/4"/>
-      <div id='banner-4' className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-3/4 w-1/4"/>
-      { children }
+      <div
+        id="banner-1"
+        className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-0 w-1/4"
+      />
+      <div
+        id="banner-2"
+        className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-1/4 w-1/4"
+      />
+      <div
+        id="banner-3"
+        className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-2/4 w-1/4"
+      />
+      <div
+        id="banner-4"
+        className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-3/4 w-1/4"
+      />
+      {children}
     </div>
-  )
-}
+  );
+};
 
-export default Template
+export default Template;

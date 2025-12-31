@@ -106,7 +106,7 @@ const CTA = () => {
 
           <div className="w-full flex gap-3">
             <TransitionLink componentType="button-primary" href="/leaderboard">Cek Peringkat</TransitionLink>
-            <TransitionLink componentType="button-outline" href="/play" transitionType="page">Mainkan</TransitionLink>
+            <TransitionLink componentType="button-outline" href="/play">Mainkan</TransitionLink>
           </div>
         </div>
         <div className="cta-image-wrapper w-full h-fit flex justify-center">

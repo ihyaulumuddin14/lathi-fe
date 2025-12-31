@@ -64,9 +64,9 @@ const MenuOverlay = () => {
       <ul className="text-primary-foreground w-full flex flex-col items-center gap-0 lg:gap-1">
         {listLinkShortcut.map((link, index) => (
           <TransitionLink
-            up="group-hover:-translate-y-[1.3em]"
+            up="group-hover:-translate-y-[1.1em]"
             componentType="button-primary"
-            transitionType={link.url === "/play" ? "page" : "template"}
+            transitionType={link.url === "/play" ? "fade" : "stagger"}
             className={`link-nav uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl py-[0em] ${pathname.split("/")[1] === link.url.split("/")[1] ? "border-x" : ""}`}
             key={index}
             href={link.url}

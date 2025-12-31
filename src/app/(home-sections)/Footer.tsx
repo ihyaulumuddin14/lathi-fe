@@ -83,7 +83,7 @@ const Footer = () => {
             <TransitionLink
               up="group-hover:-translate-y-[1.4em]"
               componentType="button-primary"
-              transitionType={link.url === "/play" ? "page" : "template"}
+              // transitionType={link.url === "/play" ? "page" : "template"}
               className="uppercase text-md sm:text-lg md:text-xl lg:text-2xl py-[0em] scale-100 hover:scale-100 active:scale-100"
               key={index}
               href={link.url}>

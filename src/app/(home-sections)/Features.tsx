@@ -130,13 +130,13 @@ const Features = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.5 }}
                   transition={{ duration: 0.5, ease: "easeInOut" }}
-                  className="uppercase text-3xl md:text-5xl lg:text-6xl z-1 text-primary-foreground sm:pl-[10vw]">
+                  className="uppercase text-3xl md:text-5xl lg:text-6xl z-1 text-primary-foreground sm:pl-[10vw] font-bold">
                      {title}
                </motion.h2>
             </AnimatePresence>
         </header>
 
-        <main className="w-full h-[clamp(10rem,26vw,20rem)] sm:mask-x-from-90% pl-10">
+        <main className="w-full h-[clamp(10rem,26vw,20rem)] sm:h-fit sm:mask-x-from-90% pl-10">
           <div className="mx-auto max-w-5xl z-1">
             <Carousel setApi={setApi} className="w-full max-w-50 sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
               <CarouselContent>
@@ -162,10 +162,10 @@ const Features = () => {
                animate={{opacity: 1}}
                exit={{opacity: 0}}
                transition={{duration: 0.5, ease: "easeInOut"}}
-               className="text-primary-foreground text-sm md:text-md lg:text-lg h-25 sm:h-30" >
+               className="text-primary-foreground text-lg h-25 sm:h-30" >
                   {features[current - 1]?.description}
             </motion.p>
-            <TransitionLink href={features[current - 1]?.url} transitionType={features[current - 1]?.url === "/play" ? "page" : "template"} componentType="button-secondary">Buka Halaman</TransitionLink>
+            <TransitionLink href={features[current - 1]?.url} componentType="button-secondary">Buka Halaman</TransitionLink>
           </div>
           <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10% overflow-visible">FITUR</h1>
         </footer>

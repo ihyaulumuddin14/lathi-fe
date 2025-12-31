@@ -5,9 +5,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
-import { ViewTransitions } from "next-view-transitions";
+// import { ViewTransitions } from "next-view-transitions";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner"
+import { SWRConfig } from "swr";
+import { chaptersDummy, SessionDataDummy, slidesDummy, userDummy } from "@/utils/constant";
+import AlertDialogIntercept from "@/components/AlertDialogIntercept";
+import { Session } from "inspector/promises";
+import { Suspense } from "react";
+import Loader from "@/components/Loader";
 
 const loveLight = Love_Light({
   variable: "--font-love-light",
@@ -36,21 +42,36 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <ViewTransitions>
-      <html lang="en">
-        <body
-          className={`font-inter antialiased`}
+    // <ViewTransitions>
+      <SWRConfig
+        value={{
+          fallback: {
+            "/api/v1/me": userDummy,
+            "api/v1/stories/chapters": chaptersDummy,
+            "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
+            "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/session": SessionDataDummy
+          },
+          revalidateOnMount: true,
+          revalidateOnFocus: false
+        }}
         >
-          <Toaster position="top-center"/>
-          <Navbar />
-          {children}
-        </body>
-      </html>
-    </ViewTransitions>
+        <html lang="en">
+          <body
+            className={`font-ibm-plex-serif antialiased`}
+          >
+            <Toaster position="top-center"/>
+            <Suspense fallback={<Loader/>}>
+               <AlertDialogIntercept />
+            </Suspense>
+            {children}
+          </body>
+        </html>
+      </SWRConfig>
+    // </ViewTransitions>
   );
 }

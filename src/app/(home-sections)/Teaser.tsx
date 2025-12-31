@@ -78,9 +78,9 @@ const Teaser = () => {
 
   return (
     <section id="teaser" className="section-wrapper relative z-1 bg-background p-[3vw] flex flex-col justify-center items-center gap-4">
-      <h2 className="uppercase text-center">Misi Utama:</h2>
+      <h2 className="uppercase text-center font-bold text-lg">Misi Utama:</h2>
       <h1 ref={teaserTitleRef} className="uppercase text-center text-4xl sm:text-6xl md:text-7xl xl:text-8xl leading-9 sm:leading-12 md:leading-14 xl:leading-20 font-extrabold tracking-tighter overflow-hidden origin-top z-2">Sowan <br /> Calon Mertua</h1>
-      <p ref={teaserDescRef} className="mt-15 w-full max-w-md">
+      <p ref={teaserDescRef} className="mt-15 w-full max-w-md text-lg">
         Bayangkan kamu duduk di ruang tamu Joglo, berhadapan dengan Bapaknya pacarmu yang <i>killer</i>.
         Salah satu kata, restu melayang. <br /><br />
         <strong>Lathi </strong> melatihmu menghadapi situasi <i>high-stakes </i> seperti ini tanpa risiko nyata. 
