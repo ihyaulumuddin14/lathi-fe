@@ -8,7 +8,8 @@ export const useChapter = () => {
       "api/v1/stories/chapters",
       fetcher,
       {
-         revalidateOnFocus: false
+         revalidateOnFocus: false,
+         shouldRetryOnError: false
       }
    )
 

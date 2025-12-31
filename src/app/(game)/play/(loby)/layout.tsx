@@ -2,8 +2,6 @@
 
 import ChapterInfo from "@/components/chapter-info/ChapterInfo";
 import MenuGameList from "@/components/game-menu-navigation/MenuGameList";
-import { useChapter } from "@/hooks/useChapter";
-import { useGameInfo } from "@/stores/useGameInfo";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
@@ -11,21 +9,9 @@ import { useEffect, useRef } from "react";
 import ProtectedRoute from "../../../ProtectedRoute";
 
 
-const PlayLayout = ({ children }: { children: React.ReactNode }) => {
+const LobyLayout = ({ children }: { children: React.ReactNode }) => {
    const logoRef = useRef<HTMLImageElement>(null);
    const lobyContentRef = useRef<HTMLDivElement>(null);
-   const { selectedChapterId, setSelectedChapterId } = useGameInfo()
-   const { chapters } = useChapter()
-
-   useEffect(() => {
-      const id = JSON.parse(localStorage.getItem("selectedChapterId") || "null")
-      if (id) setSelectedChapterId(id)
-      else setSelectedChapterId(chapters[0].id)
-   }, [])
-
-   useEffect(() => {
-      localStorage.setItem("selectedChapterId",JSON.stringify(selectedChapterId))
-   }, [selectedChapterId])
 
    useGSAP(() => {
       const timeline = gsap.timeline({
@@ -93,4 +79,4 @@ const PlayLayout = ({ children }: { children: React.ReactNode }) => {
    );
 };
 
-export default PlayLayout;
+export default LobyLayout;

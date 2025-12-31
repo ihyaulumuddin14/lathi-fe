@@ -69,7 +69,7 @@ const MenuGameList = () => {
   const { selectedChapterId } = useGameInfo()
 
   const isMenuAvailable = useCallback((index: number) => {
-      return sessionData ? true : index !== 0
+      return sessionData && (!sessionData.is_completed && !sessionData.is_game_over) ? true : index !== 0
    }, [sessionData])
 
   const handleClickMenu = (url: string, index: number) => {
@@ -101,7 +101,7 @@ const MenuGameList = () => {
             }
          break;
          case "ArrowUp":
-            if (sessionData) {
+            if (sessionData && !(sessionData.is_completed && sessionData.is_game_over)) {
                if (currentMenuIndex > 0) {
                   e.preventDefault()
                   setCurrentMenuIndex(currentMenuIndex - 1)
@@ -117,18 +117,23 @@ const MenuGameList = () => {
   }
 
    useEffect(() => {
+      if (isLoading) return
+
       const menuList = !sessionData ? lobyMenuLists.slice(1, 5) : lobyMenuLists
       const index = menuList.findIndex(item => item.url === pathname)
+
       setCurrentMenuIndex(index)
       menuRef.current[index || 1].focus()
-   }, [pathname, sessionData, error])
+
+   }, [pathname, sessionData, error, isLoading])
 
 
    useEffect(() => {
+      if (isLoading) return
       const index = sessionData ? currentMenuIndex : currentMenuIndex === 0 ? 1 : currentMenuIndex
 
-      menuRef.current[index || 1]?.focus()
-   }, [currentMenuIndex, sessionData])
+      menuRef.current[index]?.focus()
+   }, [currentMenuIndex, sessionData, isLoading])
 
    if (isLoading) {
       return (

@@ -25,6 +25,7 @@ import {
 import { logoutService } from "@/services/auth.service";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
+import { animatePageOut } from "@/utils/animation";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -170,7 +171,13 @@ const MainNavbar = () => {
               {user.username}
             </DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => router.push("/profile")}>
+              <DropdownMenuItem onSelect={() => {
+                  animatePageOut({
+                     href: "/profile",
+                     router,
+                     animate: "stagger"
+                  })
+              }}>
                 Profil
               </DropdownMenuItem>
               <DropdownMenuItem onSelect={handleLogout} variant="destructive">

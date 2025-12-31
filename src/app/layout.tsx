@@ -6,12 +6,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
 // import { ViewTransitions } from "next-view-transitions";
-import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner"
 import { SWRConfig } from "swr";
 import { chaptersDummy, SessionDataDummy, slidesDummy, userDummy } from "@/utils/constant";
 import AlertDialogIntercept from "@/components/AlertDialogIntercept";
-import { Session } from "inspector/promises";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 
@@ -53,7 +51,7 @@ export default function RootLayout({
           fallback: {
             "/api/v1/me": userDummy,
             "api/v1/stories/chapters": chaptersDummy,
-            "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
+            // "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
             "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/session": SessionDataDummy
           },
           revalidateOnMount: true,

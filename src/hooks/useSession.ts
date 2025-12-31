@@ -1,3 +1,4 @@
+import { Session } from "@/schema/GameSchema";
 import { useGameInfo } from "@/stores/useGameInfo";
 import { fetcher } from "@/utils/fetcher";
 import useSWR from "swr";
@@ -14,7 +15,7 @@ export const useSession = () => {
    )
 
    return {
-      sessionData: data,
+      sessionData: data as Session,
       error,
       isLoading,
       mutateSession: mutate

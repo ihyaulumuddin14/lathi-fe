@@ -1,9 +1,16 @@
 import privateApi from "@/api/privateApi";
 
 // POST start story session
-export const startStory = async (storyId: string) => {
-   const response = await privateApi.post(`/stories/chapters/${storyId}/start`);
-   return response.data;
+export const startStory = async (chapterId: string) => {
+   // const response = await privateApi.post(`/stories/chapters/${chapterId}/start`);
+   // return response.data;
+   
+   await new Promise(res => setTimeout(res, 3000))
+   return {
+      success: true,
+      message: "session started",
+      data: null
+   }
 }
 
 // POST story action

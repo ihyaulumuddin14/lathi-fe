@@ -25,7 +25,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    // Disable Lenis for routes that need native scrolling (nested scroll containers)
+    // Disable Lenis for routes gameplay area (too heavy)
     const shouldDisableLenis = notAnimatePageIn.includes(pathname);
     
     let lenis: Lenis | null = null;
@@ -37,7 +37,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
       
       function raf(time: number) {
         if (lenis) {
-          lenis.raf(time * 0.9);
+          lenis.raf(time * 0.5);
           rafId = requestAnimationFrame(raf);
         }
       }
