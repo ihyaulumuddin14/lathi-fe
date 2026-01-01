@@ -8,6 +8,7 @@ import { useGameInfo } from "@/stores/useGameInfo";
 import { startStory } from "@/services/stories.service";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import StoryPage from "./StoryPage";
 
 
 export default function PlaySessionPage() {
@@ -58,16 +59,17 @@ export default function PlaySessionPage() {
    return (
       <ProtectedPlay>
          <AnimatePresence mode="popLayout">
-            {(progress < 100) ? (
+            {(isLoading || progress < 100) ? (
                <motion.section
                   key="loading"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1, ease: "easeInOut" }}
-                  className="bg-neutral-950 w-full h-screen flex items-center justify-center"
+                  className="bg-neutral-950 w-full h-screen flex flex-col gap-2 items-center justify-center"
                >
                   <p className="text-secondary">{progress} %</p>
+                  <p className="text-secondary">Menyiapkan Lakon...</p>
                </motion.section>
             ) : (
                <motion.section
@@ -76,9 +78,10 @@ export default function PlaySessionPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1, ease: "easeInOut" }}
-                  className="bg-neutral-950 w-full h-screen flex items-center justify-center"
+                  className="overflow-y-hidden bg-secondary w-full h-screen flex items-center justify-center"
                >
-                  <p className="text-secondary">GAME UI</p>
+                  {/* main page */}
+                  <StoryPage shouldFetch={shouldFetch}/>
                </motion.section>
             )}
          </AnimatePresence>

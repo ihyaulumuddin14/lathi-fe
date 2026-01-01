@@ -1,10 +1,10 @@
-import Hero from "@/app/(home-sections)/Hero";
-import Features from "@/app/(home-sections)/Features";
-import Problem from "@/app/(home-sections)/Problem";
-import Teaser from "@/app/(home-sections)/Teaser";
-import Quote from "@/app/(home-sections)/Quote";
-import CTA from "@/app/(home-sections)/CTA";
-import Footer from "@/app/(home-sections)/Footer";
+import Hero from "@/app/(landing-page)/home/(home-sections)/Hero";
+import Features from "@/app/(landing-page)/home/(home-sections)/Features";
+import Problem from "@/app/(landing-page)/home/(home-sections)/Problem";
+import Teaser from "@/app/(landing-page)/home/(home-sections)/Teaser";
+import Quote from "@/app/(landing-page)/home/(home-sections)/Quote";
+import CTA from "@/app/(landing-page)/home/(home-sections)/CTA";
+import Footer from "@/app/(landing-page)/home/(home-sections)/Footer";
 
 type HomeProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>

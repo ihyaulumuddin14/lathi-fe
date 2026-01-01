@@ -86,7 +86,7 @@ const Hero = ({ verified }: { verified?: boolean }) => {
         <div className="w-full h-fit flex justify-center md:justify-start order-3 md:order-2 mt-10 md:mt-0 pb-10">
           <TransitionLink
             onMouseEnter={() => router.prefetch("/play")}
-            // transitionType="page"
+            transitionType="fade"
             href="/play"
             componentType="button-primary"
             className="hero-play-button rounded-xl text-[clamp(1.8rem,3vw,3.5rem)]"

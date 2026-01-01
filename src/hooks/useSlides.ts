@@ -5,7 +5,6 @@ import { fetcher } from "@/utils/fetcher";
 import useSWR from "swr";
 
 const fetcherSlide = async (url: string) => {
-   console.log("lagi fetching")
    await new Promise(res => {
       setTimeout(res, 3000)
    })

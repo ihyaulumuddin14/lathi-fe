@@ -2,9 +2,9 @@ import { accessTokenDummy } from "@/utils/constant";
 import { create } from "zustand";
 
 export type User = {
-  id: string,
-  name: string,
-  email: string
+   id: string,
+   username: string,
+   email: string
 }
 
 type AuthProps = {

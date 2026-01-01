@@ -1,6 +1,6 @@
 'use client'
 
-import { listLinkShortcut } from "@/app/(home-sections)/Footer";
+import { listLinkShortcut } from "@/app/(landing-page)/home/(home-sections)/Footer";
 import { useMenu } from "@/stores/useMenu";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";

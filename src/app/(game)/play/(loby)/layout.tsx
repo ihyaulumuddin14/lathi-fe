@@ -1,7 +1,7 @@
 'use client'
 
 import ChapterInfo from "@/components/chapter-info/ChapterInfo";
-import MenuGameList from "@/components/game-menu-navigation/MenuGameList";
+import GameMenuNavigation from "@/components/game-menu-navigation/GameMenuNavigation";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
@@ -55,11 +55,11 @@ const LobyLayout = ({ children }: { children: React.ReactNode }) => {
                <Image src={"/logo.png"} alt="logo" width={200} height={200} className="hidden lg:block"/>
 
                {/* GAME MENU */}
-               <MenuGameList />
+               <GameMenuNavigation />
 
                <div className="relative z-1 lg:hidden rounded-md w-full h-full flex items-center justify-center">
-               {/* CHAPTER INFO */}
-               <ChapterInfo />
+                  {/* CHAPTER INFO */}
+                  <ChapterInfo />
                </div>
 
                <p className="absolute bottom-1 left-1 text-secondary lg:text-primary lg:bottom-5 lg:left-5">Version 1.0</p>

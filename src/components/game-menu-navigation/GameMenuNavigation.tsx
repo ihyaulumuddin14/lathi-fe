@@ -58,7 +58,7 @@ const MenuIcon = ({ type, color }: { type: "continue" | "new" | "rules" | "chapt
   )
 }
 
-const MenuGameList = () => {
+const GameMenuNavigation = () => {
   const [currentMenuIndex, setCurrentMenuIndex] = useState(0)
   const [pressedIndex, setPressedIndex] = useState<number | null>(null)
   const menuWrapperRef = useRef<HTMLUListElement>(null)
@@ -184,4 +184,4 @@ const MenuGameList = () => {
   )
 }
 
-export default MenuGameList
+export default GameMenuNavigation

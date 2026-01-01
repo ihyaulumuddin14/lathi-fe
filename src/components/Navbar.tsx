@@ -180,6 +180,15 @@ const MainNavbar = () => {
               }}>
                 Profil
               </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => {
+                  animatePageOut({
+                     href: "/play",
+                     router,
+                     animate: "fade"
+                  })
+              }}>
+                Main
+              </DropdownMenuItem>
               <DropdownMenuItem onSelect={handleLogout} variant="destructive">
                 Logout
               </DropdownMenuItem>

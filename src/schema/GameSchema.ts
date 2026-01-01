@@ -10,10 +10,15 @@ export type Chapter = {
 
 export type Slide = {
    id: string,
-   background_image_url: string,
-   character_image_url: string,
-   content: string,
-   next_slide_id: string,
+   speaker_name: string | null,
+   background_image_url: string | null,
+   character_on_screen: {
+      image_url: string,
+      position: "left" | "right",
+      is_active: boolean
+   }[] | [],
+   content: string | null,
+   next_slide_id: string | null,
    vocabularies: Vocabulary[] | [],
    choices: Choice[] | []
 }
