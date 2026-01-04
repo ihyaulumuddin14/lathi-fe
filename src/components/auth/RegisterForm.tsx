@@ -19,11 +19,6 @@ const RegisterForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<RegisterCredentials>({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      username: "asdfasd",
-      email: "asdf@gmail.com",
-      password: "asdfs3J?",
-    },
     mode: "onChange",
   });
 

@@ -45,9 +45,16 @@ export const slidesDummy = [
      speaker_name: null,
      background_image_url: "/game_bg_dummy.webp",
      character_on_screen: [],
-     content: "Wanci sonten ing kutha Surabaya. Hawa taksih {panas}, nanging swasana alon-alon dados {ayem}.",
+     content: "Wanci {sonten} ing kutha Surabaya. Hawa taksih panas, nanging swasana alon-alon dados ayem.",
      next_slide_id: "2",
-     vocabularies: [],
+     vocabularies: [
+      {
+         id: "vocab-1",
+         word_krama: "Sonten",
+         word_ngoko: "Surup",
+         word_indo: "Sore"
+      }
+     ],
      choices: []
    },
  

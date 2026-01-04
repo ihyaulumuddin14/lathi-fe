@@ -18,17 +18,19 @@ import { useGameInfo } from "@/stores/useGameInfo";
 import { actionStory } from "@/services/stories.service"
 import { AxiosError } from "axios"
 import { toast } from "sonner"
+import { useTypingAnimation } from "@/stores/useTypingAnimation"
 
 export type charReaction = "normal" | "angry" | "happy"
 
 export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
    const { slides } = useSlides(shouldFetch)
    const { sessionData, error, mutateSession } = useSession()
+   const { selectedChapterId } = useGameInfo()
+   const [ isSendingChoice, setIsSendingChoice ] = useState<boolean>(false)
+   const { animationDone } = useTypingAnimation()
    const [isMuted, setIsMuted] = useState(false)
    const [isAuto, setIsAuto] = useState(false)
    const [characterReaction, setCharacterReaction] = useState<charReaction | string>("normal")
-   const { selectedChapterId } = useGameInfo()
-   const [ isSendingChoice, setIsSendingChoice ] = useState<boolean>(false)
    const [plotSlideId, setPlotSlideId] = useState<string[]>([])
 
    const slideReducer = (_slides: Slide | undefined, action: { nextSlideId: string }) => {
@@ -37,6 +39,22 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
    }
 
    const [slide, dispatch] = useReducer(slideReducer, slides.find(slide => slide.id === sessionData.current_slide_id))
+
+   useEffect(() => {
+      let timeoutReadDialog: NodeJS.Timeout;
+
+      if (isAuto && animationDone) {
+         if (slide && (slide?.choices.length === 0)) {
+            timeoutReadDialog = setTimeout(() => {
+               handleActionStory(null)
+            }, 2000)
+         }
+      }
+
+      return () => {
+         clearTimeout(timeoutReadDialog)
+      }
+   }, [isAuto, animationDone, slide])
     
    useEffect(() => {
       if (slides) {
@@ -141,7 +159,7 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
          }
 
          {/* top navbar */}
-         <div className="z-3 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
+         <div className="z-5 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
             {/* chapter title and stats */}
             <GameStats />
 
@@ -189,7 +207,7 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
                </AnimatePresence>
             </div>
 
-            {slide?.choices.length == 0 && (
+            {slide?.choices.length === 0 && animationDone && !isAuto && (
                <Button
                   className="text-2xl py-5 px-6 font-bold text-primary border-4 border-muted shadow-md shadow-secondary"
                   variant={"secondary"}

@@ -1,8 +1,8 @@
 import authApi from "@/api/authApi";
-import { LoginCredentials } from "@/schema/AuthSchema";
+import { LoginCredentials, RegisterCredentials } from "@/schema/AuthSchema";
 
 // POST register
-export const registerService = async (registerPayload: LoginCredentials) => {
+export const registerService = async (registerPayload: RegisterCredentials) => {
   const response = await authApi.post("/auth/register", registerPayload);
   return response.data
 }

@@ -1,6 +1,7 @@
 import Loader from '@/components/Loader'
 import { useSession } from '@/hooks/useSession'
 import { Slide } from '@/schema/GameSchema'
+import { useTypingAnimation } from '@/stores/useTypingAnimation'
 import { AnimatePresence, motion } from 'motion/react'
 import React, { unstable_SuspenseList } from 'react'
 
@@ -14,10 +15,11 @@ export default function Choice({
    handleActionChoice: (choice: number | null) => void
 }) {
    const { sessionData, mutateSession } = useSession()
+   const { animationDone } = useTypingAnimation()
 
    return (
       <AnimatePresence>
-         {slide !== undefined && (slide?.choices.length > 0 || isSendingChoice) && (
+         {slide !== undefined && animationDone && (slide?.choices.length > 0 || isSendingChoice) && (
             <motion.div
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
