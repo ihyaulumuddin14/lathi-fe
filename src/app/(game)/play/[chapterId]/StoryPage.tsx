@@ -1,44 +1,88 @@
 'use client'
 
-import CharDialog from "./CharDialog"
 import GameStats from "@/components/game-stats/GameStats"
+import CharDialog from "./CharDialog"
 import GameMenuOption from "./GameMenuOption"
+import Log from "./Log"
+import Dictionary from "./Dictionary"
+import Choice from "./Choice"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/hooks/useSession"
 import { useSlides } from "@/hooks/useSlides"
-import { Slide } from "@/schema/GameSchema"
-import { Menu, ScrollText, Volume2, VolumeX } from "lucide-react"
+import { Session, Slide } from "@/schema/GameSchema"
+import { Volume2, VolumeX } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import Image from "next/image"
 import { useEffect, useReducer, useState } from "react"
+import { useGameInfo } from "@/stores/useGameInfo";
+import { actionStory } from "@/services/stories.service"
+import { AxiosError } from "axios"
+import { toast } from "sonner"
+
+export type charReaction = "normal" | "angry" | "happy"
 
 export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
    const { slides } = useSlides(shouldFetch)
    const { sessionData, error, mutateSession } = useSession()
    const [isMuted, setIsMuted] = useState(false)
    const [isAuto, setIsAuto] = useState(false)
-   const [isMenuOpen, setIsMenuOpen] = useState(false)
-   const [isLogOpen, setIsLogOpen] = useState(false)
+   const [characterReaction, setCharacterReaction] = useState<charReaction | string>("normal")
+   const { selectedChapterId } = useGameInfo()
+   const [ isSendingChoice, setIsSendingChoice ] = useState<boolean>(false)
+   const [plotSlideId, setPlotSlideId] = useState<string[]>([])
 
-   const slideReducer = (_slide: Slide, action: { nextSlideId: string }) => {
-      return slides.find(slide => slide.id === action.nextSlideId) as Slide
+   const slideReducer = (_slides: Slide | undefined, action: { nextSlideId: string }) => {
+      if (slides == undefined) return 
+      return slides.find(slide => slide.id === action.nextSlideId)
    }
 
-   const [slide, dispatch] = useReducer(slideReducer, slides?.find(slide => slide.id === sessionData.current_slide_id) as Slide)
-
+   const [slide, dispatch] = useReducer(slideReducer, slides.find(slide => slide.id === sessionData.current_slide_id))
+    
    useEffect(() => {
-      if (sessionData) {
+      if (slides) {
          dispatch({ nextSlideId: sessionData.current_slide_id })
       }
-   }, [sessionData])
-   
-   // const slide = useMemo(() => {
-   //    return slides.find(slide => slide.id === sessionData.current_slide_id)
-   // }, [slides, sessionData])
+   }, [sessionData, slides])
+
+   useEffect(() => {
+      if (slide != undefined) {
+         setPlotSlideId(prev => [...prev, slide.id])
+      }
+   }, [slide])
+
+   const handleActionStory = async (choice: number | null) => {
+      if (!selectedChapterId || !slide) return
+
+      if (choice !== null) setIsSendingChoice(true)
+
+      try {
+         const response = await actionStory(selectedChapterId, slide?.id, choice)
+
+         if (response) {
+            mutateSession(
+               {...sessionData, current_slide_id: response.next_slide_id},
+               false
+            )
+            if (choice !== null) {
+               setCharacterReaction(response.character_reaction)
+            }
+            console.log(response.character_reaction)
+         }
+      } catch (error) {
+         if (error instanceof AxiosError) {
+            toast.error(error.response?.data?.message || "Terjadi kesalahan pada sistem")
+         } else {
+            toast.error("Terjadi kesalahan pada sistem")
+         }
+      } finally {
+         setIsSendingChoice(false)
+      }
+   }
 
    return (
       <div className='w-full h-screen bg-secondary relative'>
-         <Image src={"/game_bg_dummy.webp"} alt="background_story" fill className="object-cover brightness-50 z-0"/>
+         {/* background */}
+         <Image src={"/game_bg_dummy.webp"} alt="story_background_image" fill className="object-cover brightness-50 z-0"/>
 
          {/* character container */}
          <div className="z-1 absolute bottom-20 lg:bottom-5 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full overflow-visible">
@@ -46,12 +90,16 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
             <AnimatePresence mode="popLayout">
                {slide?.character_on_screen[0] && (
                   <motion.div
-                     key={slide?.id}
+                     key="char-a"
                      initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
                      exit={{ opacity: 0 }}
+                     animate={{
+                        opacity: slide.character_on_screen[0].is_active ? 1 : 0.5,
+                        x: slide.character_on_screen[0].is_active ? 0 : -200,
+                        scale: slide.character_on_screen[0].is_active ? 1.3 : 1
+                      }}
                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                     className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70 ${slide?.character_on_screen[0].is_active ? "translate-x-0 opacity-100 sm:scale-130" : "-translate-x-full sm:translate-x-0 opacity-50 sm:scale-100"} transition-all duration-500 ease-in-out`}>
+                     className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
                         <Image src={slide?.character_on_screen[0].image_url} fill alt="char_img" className="object-cover"/>
                   </motion.div>
                )}
@@ -61,22 +109,36 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
             <AnimatePresence mode="popLayout">
                {slide?.character_on_screen[1] && (
                   <motion.div
-                     key={slide?.id}
+                     key="char-b"
                      initial={{ opacity: 0 }}
-                     animate={{ opacity: 1 }}
                      exit={{ opacity: 0 }}
+                     animate={{
+                        opacity: slide.character_on_screen[1].is_active ? 1 : 0.5,
+                        x: slide.character_on_screen[1].is_active ? 0 : 200,
+                        scale: slide.character_on_screen[1].is_active ? 1.3 : 1
+                      }}
                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                     className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70% ${slide?.character_on_screen[1].is_active ? "translate-x-0 opacity-100 sm:scale-130" : "translate-x-full sm:translate-x-0 opacity-50 sm:scale-100"} transition-all duration-500 ease-in-out`}>
-                        <Image src={slide?.character_on_screen[1].image_url} fill alt="char_img" className="object-cover"/>
+                     className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
+                        <Image src={slide.character_on_screen[1].image_url} fill alt="char_img" className="object-cover"/>
                   </motion.div>
                )}
             </AnimatePresence>
          </div>
 
-
          {/* dialog box */}
-         <CharDialog slide={slide}/>
+         {slide !== undefined && <CharDialog
+               slide={slide}
+               characterReaction={characterReaction}
+            />
+         }
 
+         {/* choice */}
+         {slide !== undefined && <Choice
+               isSendingChoice={isSendingChoice}
+               slide={slide}
+               handleActionChoice={handleActionStory}
+            />
+         }
 
          {/* top navbar */}
          <div className="z-3 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -84,30 +146,12 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
             <GameStats />
 
             {/* menu and log */}
-            <div className="flex flex-col gap-3 w-fit h-full items-center">
+            <div className="flex flex-col gap-3 w-fit h-full items-end">
                <GameMenuOption />
-
-               <AnimatePresence mode="popLayout">
-                  <motion.button
-                     className={`${isLogOpen ? "bg-primary" : "bg-secondary"} p-2 rounded-full cursor-pointer flex justify-between items-center`}
-                     onClick={() => setIsLogOpen(prev => !prev)}
-                     key={isLogOpen ? "openMenu" : "closeMenu"}
-                     initial={{ scale: 0 }}
-                     animate={{ scale: 1 }}
-                     exit={{ scale: 0 }}
-                     transition={{ duration: 0.2, ease: "easeInOut" }}
-                     >
-                     {isLogOpen ? (
-                        <ScrollText size={20} color="#F2EAD3"/>
-                     ) : (
-                        <ScrollText size={20} color="#3F2305"/>
-                     ) }
-                  </motion.button>
-                  <p className="-mt-3 text-secondary text-shadow-2xs text-shadow-primary">Log</p>
-               </AnimatePresence>
+               <Log slides={slides} plotSlideId={plotSlideId}/>
+               {slide && <Dictionary slide={slide}/>}
             </div>
          </div>
-
 
          {/* bottom navbar */}
          <div className="z-3 w-full max-w-[1280px] h-[50px] px-[4vw] absolute bottom-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -145,15 +189,17 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
                </AnimatePresence>
             </div>
 
-            <Button
-               className="text-2xl py-5 px-6 font-bold text-primary border-4 border-muted shadow-md shadow-secondary"
-               variant={"secondary"}
-               onClick={() => {
-                  mutateSession({ ...sessionData, current_slide_id: slide.next_slide_id }, false)
-               }}
-               >
-                  Lanjut
-            </Button>
+            {slide?.choices.length == 0 && (
+               <Button
+                  className="text-2xl py-5 px-6 font-bold text-primary border-4 border-muted shadow-md shadow-secondary"
+                  variant={"secondary"}
+                  onClick={() => {
+                     handleActionStory(null)
+                  }}
+                  >
+                     Lanjut
+               </Button>
+            )}
          </div>
       </div>
    )

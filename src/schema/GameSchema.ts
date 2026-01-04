@@ -16,11 +16,11 @@ export type Slide = {
       image_url: string,
       position: "left" | "right",
       is_active: boolean
-   }[] | [],
+   }[],
    content: string | null,
    next_slide_id: string | null,
-   vocabularies: Vocabulary[] | [],
-   choices: Choice[] | []
+   vocabularies: Vocabulary[],
+   choices: Choice[]
 }
 
 export type Vocabulary = {

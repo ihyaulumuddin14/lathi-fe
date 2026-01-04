@@ -30,7 +30,7 @@ export default function GameStats() {
 
    return (
       <>
-         <div onClick={() => setIsOpen(true)} className="flex flex-col w-full max-w-[200px] h-full bg-secondary rounded-lg p-1 cursor-pointer hover:scale-105 transition-all duration-150 ease-in-out">
+         <div onClick={() => setIsOpen(true)} className="flex flex-col w-full max-w-[200px] h-full max-h-[100px] bg-secondary rounded-lg p-1 cursor-pointer hover:scale-105 transition-all duration-150 ease-in-out">
             <h1 className="text-lg font-bold border-4 border-primary px-2 rounded-md rounded-bl-none">{chapter?.title}</h1>
             <div className="w-full h-full flex">
                {/* chapter box */}

@@ -78,7 +78,7 @@ export default function PlaySessionPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1, ease: "easeInOut" }}
-                  className="overflow-y-hidden bg-secondary w-full h-screen flex items-center justify-center"
+                  className="overflow-hidden bg-secondary w-full h-screen flex items-center justify-center"
                >
                   {/* main page */}
                   <StoryPage shouldFetch={shouldFetch}/>

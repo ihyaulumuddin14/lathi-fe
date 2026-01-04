@@ -35,6 +35,8 @@
     "styled-components": "^6.1.19",
     "swr": "^2.3.8",
     "tailwind-merge": "^3.4.0",
+    "typewriter-effect": "^2.22.0",
+    "vaul": "^1.1.2",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
