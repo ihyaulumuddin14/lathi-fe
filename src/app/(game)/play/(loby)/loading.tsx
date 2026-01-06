@@ -6,8 +6,8 @@ export default function loading() {
       <div
          className={`
             lg:ml-96 w-full lg:w-[calc(100vw-384px)] h-[60vh] lg:h-screen absolute
-            top-0 left-0 overflow-y-auto overflow-x-hidden lg:mask-b-from-90%
-            text-xl flex justify-between items-center
+            top-0 right-0 overflow-y-auto overflow-x-hidden lg:mask-b-from-90%
+            text-xl flex justify-center items-center
          `}>
             <Loader className='w-[50px] border-8'/>
       </div>

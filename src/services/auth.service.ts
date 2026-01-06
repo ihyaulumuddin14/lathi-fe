@@ -18,3 +18,17 @@ export const logoutService = async () => {
   const response = await authApi.post("/auth/logout");
   return response.data;
 }
+
+// POST refresh
+export const refreshService = async () => {
+   const response = await authApi.post("/auth/refresh");
+   return response.data;
+}
+
+// POST verify
+export const verifyService = async (verifyPayload: {
+   token: string
+}) => {
+   const response = await authApi.post("/auth/verify", verifyPayload);
+   return response.data
+}

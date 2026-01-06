@@ -36,8 +36,17 @@ export type Choice = {
 }
 
 export type Session = {
+   session_id: string,
    current_slide_id: string,
    current_hearts: number,
    is_game_over: boolean,
-   is_completed: boolean
+   is_completed: boolean,
+   history_log: History[]
+}
+
+export type History = {
+   speaker: string,
+   text: string,
+   is_user: boolean,
+   timestamp: string
 }

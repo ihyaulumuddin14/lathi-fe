@@ -12,20 +12,19 @@ import TransitionLink from "./TransitionLink";
 import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept";
 import { useMenu } from "@/stores/useMenu";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { useUser } from "@/hooks/useUser";
 import { ChevronLeft, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { logoutService } from "@/services/auth.service";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { animatePageOut } from "@/utils/animation";
+import { useShallow } from "zustand/shallow";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -70,21 +69,32 @@ const MainNavbar = () => {
   const { setAlertDialogType } = useAlertDialogIntercept();
   const { isOpenMenu, setIsOpenMenu } = useMenu();
 
-  const { accessToken } = useAuthStore();
-  const { user, mutateUser } = useUser();
+  const { accessToken, setAccessToken } = useAuthStore(
+   useShallow(state => ({
+      accessToken: state.accessToken,
+      setAccessToken: state.setAccessToken
+   }))
+  );
 
   const handleLogout = async () => {
     try {
-      await logoutService();
-      mutateUser(null, false);
+      const response = await logoutService();
+      
+      if (response.success) {
+         setAccessToken(null)
 
-      if (pathname !== "/") {
-         router.push("/");
+         if (pathname !== "/") {
+            router.push("/");
+         }
+         
+         toast.success(response.message)
+      } else {
+         throw Error()
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(
-          error.response?.data?.message || "Terjadi kesalahan sistem"
+          error.response?.data?.error.message || "Terjadi kesalahan sistem"
         );
       } else {
         toast.error("Terjadi kesalahan sistem");
@@ -147,7 +157,7 @@ const MainNavbar = () => {
             />
           </TransitionLink>
 
-          {user && accessToken && (
+          {accessToken && (
             <ul className="flex gap-10">
               <TransitionLink href={"/collection"}>Koleksi Kata</TransitionLink>
               <TransitionLink href={"/leaderboard"}>
@@ -159,7 +169,7 @@ const MainNavbar = () => {
         </>
       )}
 
-      {user && accessToken ? (
+      {accessToken ? (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div className="w-fit rounded-full bg-background hover:scale-105 duration-75 transition-all ease-in-out active:scale-100 p-2 hover:bg-muted cursor-pointer">
@@ -167,9 +177,9 @@ const MainNavbar = () => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/2 w-fit">
-            <DropdownMenuLabel className="text-center text-muted-foreground">
+            {/* <DropdownMenuLabel className="text-center text-muted-foreground">
               {user.username}
-            </DropdownMenuLabel>
+            </DropdownMenuLabel> */}
             <DropdownMenuGroup>
               <DropdownMenuItem onSelect={() => {
                   animatePageOut({

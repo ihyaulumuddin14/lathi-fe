@@ -1,7 +1,7 @@
 'use client'
 
-import { useGameInfo } from '@/stores/useGameInfo'
 import { useChapter } from "@/hooks/useChapter";
+import { useGameInfo } from '@/stores/useGameInfo';
 import { useEffect } from 'react';
 
 export default function GameLayout({ children }: { children: React.ReactNode }) {
@@ -9,6 +9,8 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
    const { chapters } = useChapter()
 
    useEffect(() => {
+      if (!chapters) return
+
       const id = JSON.parse(localStorage.getItem("selectedChapterId") || "null")
 
       if (id) {
@@ -19,7 +21,9 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
    }, [chapters, setSelectedChapterId])
 
    useEffect(() => {
-      localStorage.setItem("selectedChapterId",JSON.stringify(selectedChapterId))
+      if (!selectedChapterId) return
+
+      localStorage.setItem("selectedChapterId", JSON.stringify(selectedChapterId))
    }, [selectedChapterId])
 
    return (

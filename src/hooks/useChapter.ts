@@ -4,18 +4,19 @@ import useSWR from "swr";
 
 
 export const useChapter = () => {
-   const { data: chapters, error, isLoading } = useSWR(
-      "api/v1/stories/chapters",
+   const { data, error, isLoading, isValidating } = useSWR(
+      "/stories/chapters",
       fetcher,
       {
          revalidateOnFocus: false,
-         shouldRetryOnError: false
+         shouldRetryOnError: true
       }
    )
 
    return {
-      chapters: chapters as Chapter[],
+      chapters: data?.data as Chapter[],
       error,
-      isLoading
+      isLoading,
+      isValidating
    }
 }

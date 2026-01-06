@@ -35,11 +35,11 @@ const TransitionLink = ({
   componentType = "link",
   className,
 }: TransitionLinkProps) => {
+   // const transitionRouter = useTransitionRouter();
+   //   const { user } = useUser();
   const router = useRouter();
-  // const transitionRouter = useTransitionRouter();
   const pathname = usePathname();
   const { accessToken } = useAuthStore();
-  const { user } = useUser();
   const { setAlertDialogType } = useAlertDialogIntercept();
 
   const handleClick = () => {
@@ -48,7 +48,7 @@ const TransitionLink = ({
       onClick && onClick();
 
       if (protectedRouteLists.includes(href)) {
-        if (!user || !accessToken) {
+        if (!accessToken) {
           setAlertDialogType("login");
           return;
         }

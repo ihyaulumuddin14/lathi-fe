@@ -1,18 +1,49 @@
 "use client";
 
-import AlertDialogIntercept from "@/components/AlertDialogIntercept";
-import MenuOverlay from "@/components/MenuOverlay";
 // import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept"
+// import AlertDialogIntercept from "@/components/AlertDialogIntercept";
+import MenuOverlay from "@/components/MenuOverlay";
+import { refreshService } from "@/services/auth.service";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { animatePageIn } from "@/utils/animation";
+import { AxiosError } from "axios";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
+import { useShallow } from "zustand/shallow";
 
 const notAnimatePageIn = ["/play/chapters", "/play/rules"];
 
 const Template = ({ children }: { children: React.ReactNode }) => {
-  const pathname = usePathname();
-  // const { open } = useAlertDialogIntercept()
+   const pathname = usePathname();
+   const { accessToken, setAccessToken } = useAuthStore(
+      useShallow(state => ({
+         accessToken: state.accessToken,
+         setAccessToken: state.setAccessToken
+      }))
+   )
+
+   useEffect(() => {
+      const fetchRefresh = async () => {
+         try {
+            const response = await refreshService()
+
+            if (response.success) {
+               setAccessToken(response.data.access_token)
+               toast.success(response.message)
+            }
+         } catch (error) {
+            if (error instanceof AxiosError) {
+               toast.error(error.response?.data.error.message || "Terjadi kesalahan pada sistem")
+            } else {
+               toast.error("Terjadi kesalahan pada sistem")
+            }
+         }
+      }
+
+      if (!accessToken) fetchRefresh()
+   }, [accessToken, setAccessToken])
 
   useEffect(() => {
     const run = () => {
@@ -25,7 +56,7 @@ const Template = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    // Disable Lenis for routes gameplay area (too heavy)
+    // Disable Lenis for routes gameplay area (cuz too heavy)
     const shouldDisableLenis = notAnimatePageIn.includes(pathname);
     
     let lenis: Lenis | null = null;

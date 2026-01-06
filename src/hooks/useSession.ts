@@ -10,12 +10,12 @@ export const useSession = () => {
       fetcher,
       {
          revalidateOnReconnect: true,
-         shouldRetryOnError: false
+         shouldRetryOnError: false,
       }
    )
 
    return {
-      sessionData: data as Session,
+      sessionData: data?.data as Session,
       error,
       isLoading,
       mutateSession: mutate

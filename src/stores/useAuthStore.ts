@@ -1,4 +1,3 @@
-import { accessTokenDummy } from "@/utils/constant";
 import { create } from "zustand";
 
 export type User = {
@@ -13,6 +12,6 @@ type AuthProps = {
 }
 
 export const useAuthStore = create<AuthProps>(set => ({
-  accessToken: accessTokenDummy,
+  accessToken: null,
   setAccessToken: (accessToken: string | null) => set({ accessToken })
 }))

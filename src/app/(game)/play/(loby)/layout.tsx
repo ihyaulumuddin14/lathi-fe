@@ -2,18 +2,20 @@
 
 import ChapterInfo from "@/components/chapter-info/ChapterInfo";
 import GameMenuNavigation from "@/components/game-menu-navigation/GameMenuNavigation";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import ProtectedRoute from "../../../ProtectedRoute";
 
 
 const LobyLayout = ({ children }: { children: React.ReactNode }) => {
    const logoRef = useRef<HTMLImageElement>(null);
    const lobyContentRef = useRef<HTMLDivElement>(null);
+   const [imageReady, setImageReady] = useState(false);
 
-   useGSAP(() => {
+   useLayoutEffect(() => {
+      if (!imageReady) return
+
       const timeline = gsap.timeline({
          ease: "power2.out",
       });
@@ -37,43 +39,50 @@ const LobyLayout = ({ children }: { children: React.ReactNode }) => {
          opacity: 1,
          ease: "power2.out"
       })
-   }, [])
+   }, [imageReady])
 
    return (
       <ProtectedRoute>
          <section className="w-full h-screen relative overflow-y-hidden">
-         <Image ref={logoRef} src={"/logo.png"} alt="logo" width={200} height={200} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"/>
+            <Image
+               onLoad={() => setImageReady(true)}
+               ref={logoRef}
+               src={"/logo.png"}
+               alt="logo"
+               width={200} height={200}
+               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+            />
 
-         <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10 blur-sm"></div>
+            <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10 blur-sm"></div>
 
 
-         {/* WRAPPER NAV MENU */}
-         <section ref={lobyContentRef} className="section-wrapper relative">
-            <nav className="w-full lg:max-w-sm h-[40vh] lg:h-screen absolute bottom-0 left-0 grid grid-cols-[1.5fr_1fr] lg:flex flex-col gap-4 items-center p-[3vw]">
-               <div className="w-full h-full absolute bg-accent-foreground/70 mask-t-from-90% lg:mask-y-from-50%"/>
-               {/* LOGO */}
-               <Image src={"/logo.png"} alt="logo" width={200} height={200} className="hidden lg:block"/>
+            {/* WRAPPER NAV MENU */}
+            <div ref={lobyContentRef} className="section-wrapper relative">
+               <nav className="w-full lg:max-w-sm h-[40vh] lg:h-screen absolute bottom-0 left-0 grid grid-cols-[1.5fr_1fr] lg:flex flex-col gap-4 items-center p-[3vw]">
+                  <div className="w-full h-full absolute bg-accent-foreground/70 mask-t-from-90% lg:mask-y-from-50%"/>
+                  {/* LOGO */}
+                  <Image src={"/logo.png"} alt="logo" width={200} height={200} className="hidden lg:block"/>
 
-               {/* GAME MENU */}
-               <GameMenuNavigation />
+                  {/* GAME MENU */}
+                  <GameMenuNavigation />
 
-               <div className="relative z-1 lg:hidden rounded-md w-full h-full flex items-center justify-center">
-                  {/* CHAPTER INFO */}
+                  <div className="relative z-1 lg:hidden rounded-md w-full h-full flex items-center justify-center">
+                     {/* CHAPTER INFO */}
+                     <ChapterInfo />
+                  </div>
+
+                  <p className="absolute bottom-1 left-1 text-secondary lg:text-primary lg:bottom-5 lg:left-5">Version 1.0</p>
+               </nav>
+
+               <main className="lg:ml-96 w-full lg:w-[calc(100vw-384px)] h-[60vh] lg:h-screen absolute top-0 left-0 overflow-y-auto overflow-x-hidden lg:mask-b-from-90%">
+                  { children }
+               </main>
+
+               {/* CHAPTER INFO */}
+               <aside className="absolute right-10 top-10 hidden rounded-md w-full max-w-50 aspect-square lg:flex items-center">
                   <ChapterInfo />
-               </div>
-
-               <p className="absolute bottom-1 left-1 text-secondary lg:text-primary lg:bottom-5 lg:left-5">Version 1.0</p>
-            </nav>
-
-            <main className="lg:ml-96 w-full lg:w-[calc(100vw-384px)] h-[60vh] lg:h-screen absolute top-0 left-0 overflow-y-auto overflow-x-hidden lg:mask-b-from-90%">
-               { children }
-            </main>
-
-            {/* CHAPTER INFO */}
-            <aside className="absolute right-10 top-10 hidden rounded-md w-full max-w-50 aspect-square lg:flex items-center">
-               <ChapterInfo />
-            </aside>
-         </section>
+               </aside>
+            </div>
          </section>
       </ProtectedRoute>
    );

@@ -46,18 +46,18 @@ export default function RootLayout({
 }>) {
   return (
     // <ViewTransitions>
-      <SWRConfig
-        value={{
-          fallback: {
-            "/api/v1/me": userDummy,
-            "api/v1/stories/chapters": chaptersDummy,
-            "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
-            "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/session": SessionDataDummy
-          },
-          revalidateOnMount: true,
-          revalidateOnFocus: false
-        }}
-        >
+      // <SWRConfig
+      //   value={{
+      //     fallback: {
+      //       "/api/v1/me": userDummy,
+      //       "api/v1/stories/chapters": chaptersDummy,
+      //       "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
+      //       "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/session": SessionDataDummy
+      //     },
+      //     revalidateOnMount: true,
+      //     revalidateOnFocus: false
+      //   }}
+      //   >
         <html lang="en">
           <body
             className={`font-ibm-plex-serif antialiased`}
@@ -69,7 +69,7 @@ export default function RootLayout({
             {children}
           </body>
         </html>
-      </SWRConfig>
+      // </SWRConfig>
     // </ViewTransitions>
   );
 }

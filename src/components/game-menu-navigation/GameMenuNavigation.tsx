@@ -20,7 +20,7 @@ const lobyMenuLists = [
     iconType: "new"
   },
   {
-    title: "Pilih Chapter",
+    title: "Pilih Bagian",
     url: "/play/chapters",
     iconType: "chapter"
   },
@@ -115,26 +115,26 @@ const GameMenuNavigation = () => {
          break;
       }
   }
-
+   
    useEffect(() => {
-      if (isLoading) return
+      if (sessionData === undefined) {
+         setCurrentMenuIndex(1)
+         return
+      }
 
-      const menuList = !sessionData ? lobyMenuLists.slice(1, 5) : lobyMenuLists
-      const index = menuList.findIndex(item => item.url === pathname)
-
+      const index = sessionData !== null ? currentMenuIndex : (currentMenuIndex === 0) ? 1 : currentMenuIndex
       setCurrentMenuIndex(index)
-      menuRef.current[index || 1].focus()
-
-   }, [pathname, sessionData, error, isLoading])
-
-
-   useEffect(() => {
-      if (isLoading) return
-      const index = sessionData ? currentMenuIndex : currentMenuIndex === 0 ? 1 : currentMenuIndex
 
       menuRef.current[index]?.focus()
-   }, [currentMenuIndex, sessionData, isLoading])
+   }, [sessionData, currentMenuIndex])
 
+   useEffect(() => {
+      const index = lobyMenuLists.findIndex(item => item.url === pathname)
+      setCurrentMenuIndex(index)
+      menuRef.current[index].focus()
+
+   }, [pathname])
+   
    if (isLoading) {
       return (
          <div className='w-full h-full flex justify-center items-center'>
@@ -161,14 +161,17 @@ const GameMenuNavigation = () => {
             if (e.key === "Enter") {
                if (isMenuAvailable(index)) {
                   setPressedIndex(null)
+                  console.log(item.title)
                   handleClickMenu(item.url, index)
                }
             }
-          }}
-          onClick={() => {
+         }}
+         onClick={() => {
             if (isMenuAvailable(index)) {
                setCurrentMenuIndex(index)
                handleClickMenu(item.url, index)
+               console.log(item.title)
+
             }
           }}
           className={`${isMenuAvailable(index) ? "" : "saturate-0 pointer-events-none"} ${index === pressedIndex ? "is-pressed" : ""} ${index === currentMenuIndex && "scale-110"} w-9/10 lg:text-lg lg:h-12 lg:px-6 lg:py-4`}

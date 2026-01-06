@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@/hooks/useUser";
 import { LoginCredentials, LoginSchema } from "@/schema/AuthSchema";
 import { loginService } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -11,14 +10,13 @@ import { toast } from "sonner";
 import Loader from "../Loader";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { userDummy } from "@/utils/constant";
+// import { userDummy } from "@/utils/constant";
 import { useRouter } from "next/navigation";
 import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept";
 
 const LoginForm = () => {
   const { setAccessToken } = useAuthStore();
   const { onOpenChange } = useAlertDialogIntercept()
-  const { mutateUser } = useUser();
   const router = useRouter()
   const {
     register,
@@ -32,24 +30,27 @@ const LoginForm = () => {
     },
   });
 
-  const handleLoginSubmit = async (loginPayload: LoginCredentials) => {
-    try {
-      const data = await loginService(loginPayload);
-      setAccessToken(data.accessToken);
-
-      // fetch data user using SWR and new access token on zustand store
-      mutateUser(userDummy, false);
-      router.replace("/")
-      onOpenChange(false)
-      toast.success("Berhasil login");
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.message || "Terjadi kesalahan sistem");
-      } else {
-        toast.error("Terjadi kesalahan sistem");
+   const handleLoginSubmit = async (loginPayload: LoginCredentials) => {
+      try {
+         const response = await loginService(loginPayload);
+         
+         if (response.success) {
+            setAccessToken(response.data.access_token);
+            
+            router.replace("/")
+            onOpenChange(false)
+            toast.success(response.message);
+         } else {
+            throw Error()
+         }
+      } catch (error) {
+         if (error instanceof AxiosError) {
+            toast.error(error.response?.data?.error.message || "Terjadi kesalahan sistem");
+         } else {
+            toast.error("Terjadi kesalahan sistem");
+         }
       }
-    }
-  };
+   };
 
   return (
     <form

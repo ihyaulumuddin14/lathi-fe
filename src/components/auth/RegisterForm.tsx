@@ -24,14 +24,18 @@ const RegisterForm = () => {
 
   const handleRegisterSubmit = async (registerPayload: RegisterCredentials) => {
     try {
-      const data = await registerService(registerPayload);
+      const response = await registerService(registerPayload);
 
-      setAlertDialogType("email-sent");
-      toast.success(data.message);
+      if (response) {
+         setAlertDialogType("email-sent");
+         toast.success(response.message);
+      } else {
+         throw Error()
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(
-          error.response?.data?.message || "Terjadi kesalahan sistem"
+          error.response?.data?.error.message || "Terjadi kesalahan sistem"
         );
       } else {
         toast.error("Terjadi kesalahan sistem");
