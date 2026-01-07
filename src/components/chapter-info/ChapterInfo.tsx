@@ -51,10 +51,6 @@ const ChapterInfo = () => {
          dispatch({ id: selectedChapterId })
       }
    }, [selectedChapterId])
-
-   useEffect(() => {
-      console.log(sessionData)
-   }, [sessionData])
    
    if (!chapters) {
       return <div className="flex justify-center items-center w-full max-w-50 text-secondary-foreground relative aspect-square rounded-full shadow-2xl hover:scale-102 active:scale-97 transition-all duration-200 cubic-bezier(0.65,-0.67,0.27,0.99) cursor-pointer -rotate-5 shadow-accent-foreground bg-secondary">
@@ -87,7 +83,7 @@ const ChapterInfo = () => {
                      ${status === "COMPLETED" && " bg-ring text-uppercase text-xl px-5 border-2 border-secondary"}
                      `}>
                         {status === "PLAYING" && "Sedang dimainkan"}
-                        {status === "GAMEOVER" && "GAME OVER"}
+                        {status === "GAMEOVER" && "GAGAL"}
                         {status === "COMPLETED" && "TAMAT"}
                   </p>
                )}
@@ -150,7 +146,7 @@ const ChapterInfo = () => {
                               ${status === "COMPLETED" && " bg-ring text-uppercase text-xl px-5 border-2 border-secondary"}
                            `}>
                               {status === "PLAYING" && "Sedang dimainkan"}
-                              {status === "GAMEOVER" && "GAME OVER"}
+                              {status === "GAMEOVER" && "GAGAL"}
                               {status === "COMPLETED" && "TAMAT"}
                         </p>
                      </div>

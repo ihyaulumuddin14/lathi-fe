@@ -7,6 +7,9 @@ import { Button } from '../ui/button'
 import { animatePageOut } from '@/utils/animation'
 import Loader from '../Loader'
 import { useGameInfo } from '@/stores/useGameInfo'
+import { toast } from 'sonner'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { MessageSquareWarning } from 'lucide-react'
 
 const lobyMenuLists = [
   {
@@ -59,39 +62,63 @@ const MenuIcon = ({ type, color }: { type: "continue" | "new" | "rules" | "chapt
 }
 
 const GameMenuNavigation = () => {
-  const [currentMenuIndex, setCurrentMenuIndex] = useState(0)
-  const [pressedIndex, setPressedIndex] = useState<number | null>(null)
-  const menuWrapperRef = useRef<HTMLUListElement>(null)
-  const menuRef = useRef<HTMLButtonElement[]>([])
-  const pathname = usePathname()
-  const router = useRouter()
-  const { sessionData, error, isLoading } = useSession()
-  const { selectedChapterId } = useGameInfo()
+   const [isOpen, setIsOpen] = useState(false)
+   const [currentMenuIndex, setCurrentMenuIndex] = useState(1)
+   const [pressedIndex, setPressedIndex] = useState<number | null>(null)
+   const menuWrapperRef = useRef<HTMLUListElement>(null)
+   const menuRef = useRef<HTMLButtonElement[]>([])
+   const pathname = usePathname()
+   const router = useRouter()
+   const { sessionData, error, isLoading } = useSession()
+   const { selectedChapterId } = useGameInfo()
 
-  const isMenuAvailable = useCallback((index: number) => {
+   const isMenuAvailable = useCallback((index: number) => {
+      if (!selectedChapterId) return false
       return sessionData && (!sessionData.is_completed && !sessionData.is_game_over) ? true : index !== 0
-   }, [sessionData])
+   }, [sessionData, selectedChapterId])
 
-  const handleClickMenu = (url: string, index: number) => {
-   if (url !== "/play") {
-      if (url === "/home") {
-         animatePageOut({
-            href: url,
-            router,
-            animate: "fade"
-         })
+   const handleClickMenu = (url: string, index: number) => {
+      if (url !== "/play") {
+         if (url === "/home") {
+            animatePageOut({
+               href: url,
+               router,
+               animate: "fade"
+            })
+         } else {
+            router.push(url)
+         }
       } else {
-         router.push(url)
+         if (index === 0) {
+            if (!sessionData) {
+               return
+            } else {
+               animatePageOut({
+                  href: `${url}/${selectedChapterId}?mode=continue`,
+                  router,
+                  animate: "fade"
+               })
+            }
+         } else if (index === 1) {
+            if (sessionData) {
+               /*
+                  confirmation for restarting chapter,
+                  if the user have a session with the chapter
+               */ 
+               setIsOpen(true)
+               return
+            } else {
+               animatePageOut({
+                  href: `${url}/${selectedChapterId}?mode=new`,
+                  router,
+                  animate: "fade"
+               })
+            }
+         }
+
       }
-   } else {
-      animatePageOut({
-         href: `${url}/${selectedChapterId}`,
-         router,
-         animate: "fade"
-      })
    }
-  }
-  
+   
    const handleSelectedMenu = (e: KeyboardEvent<HTMLUListElement>) => {
       switch(e.key) {
          case "ArrowDown":
@@ -114,25 +141,35 @@ const GameMenuNavigation = () => {
             }
          break;
       }
-  }
+   }
    
+   /*
+      currentMenuIndex checking,
+      filter for the selected chapter with not started yet,
+      disable continue lakon button
+   */
    useEffect(() => {
-      if (sessionData === undefined) {
-         setCurrentMenuIndex(1)
-         return
-      }
+      if (!sessionData) return
 
-      const index = sessionData !== null ? currentMenuIndex : (currentMenuIndex === 0) ? 1 : currentMenuIndex
+      const index = 
+         (sessionData === null) ? currentMenuIndex :
+         (sessionData.is_completed || sessionData.is_game_over) ?
+         ((currentMenuIndex === 0) ? 1 : currentMenuIndex) : currentMenuIndex
+         
       setCurrentMenuIndex(index)
 
       menuRef.current[index]?.focus()
    }, [sessionData, currentMenuIndex])
 
+   /*
+      focusing button menu on current pathname
+   */
    useEffect(() => {
+      if (!menuRef.current) return
+      
       const index = lobyMenuLists.findIndex(item => item.url === pathname)
       setCurrentMenuIndex(index)
       menuRef.current[index].focus()
-
    }, [pathname])
    
    if (isLoading) {
@@ -143,48 +180,77 @@ const GameMenuNavigation = () => {
       )
    }
 
-  return (
-    <ul
-      onKeyDown={handleSelectedMenu}
-      ref={menuWrapperRef}
-      className="flex flex-col w-full gap-2 lg:gap-4 items-center relative z-1"
-      >
-      {lobyMenuLists.map((item, index) => (
-        <Button
-          key={index}
-          onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
-            if (e.key === "Enter") {
-              if (isMenuAvailable(index)) setPressedIndex(index)
-            }
-          }}
-          onKeyUp={(e: KeyboardEvent<HTMLButtonElement>) => {
-            if (e.key === "Enter") {
-               if (isMenuAvailable(index)) {
-                  setPressedIndex(null)
-                  console.log(item.title)
-                  handleClickMenu(item.url, index)
-               }
-            }
-         }}
-         onClick={() => {
-            if (isMenuAvailable(index)) {
-               setCurrentMenuIndex(index)
-               handleClickMenu(item.url, index)
-               console.log(item.title)
+   return (
+      <>
+         <ul
+            onKeyDown={handleSelectedMenu}
+            ref={menuWrapperRef}
+            className="flex flex-col w-full gap-2 lg:gap-4 items-center relative z-1"
+            >
+            {lobyMenuLists.map((item, index) => (
+            <Button
+               key={index}
+               onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
+                  if (e.key === "Enter") {
+                     if (isMenuAvailable(index)) setPressedIndex(index)
+                  }
+               }}
+               onKeyUp={(e: KeyboardEvent<HTMLButtonElement>) => {
+                  if (e.key === "Enter") {
+                     if (isMenuAvailable(index)) {
+                        setPressedIndex(null)
+                        handleClickMenu(item.url, index)
+                     }
+                  }
+               }}
+               onClick={() => {
+                  if (isMenuAvailable(index)) {
+                     setCurrentMenuIndex(index)
+                     handleClickMenu(item.url, index)
+                  }
+               }}
+               className={`${isMenuAvailable(index) ? "" : "saturate-0 pointer-events-none"} ${index === pressedIndex ? "is-pressed" : ""} ${index === currentMenuIndex && "scale-110"} w-9/10 lg:text-lg lg:h-12 lg:px-6 lg:py-4`}
+               variant={index === currentMenuIndex ? "default" : "secondary"}
+               ref={(element) => {if (element) menuRef.current[index] = element}}
+               tabIndex={index === currentMenuIndex ? 0 : -1}
+               >
+                  <MenuIcon type={item.iconType} color={index === currentMenuIndex ? "var(--secondary)" : "var(--primary)"}/>
+                  {item.title}
+            </Button>
+            ))}
+         </ul>
 
-            }
-          }}
-          className={`${isMenuAvailable(index) ? "" : "saturate-0 pointer-events-none"} ${index === pressedIndex ? "is-pressed" : ""} ${index === currentMenuIndex && "scale-110"} w-9/10 lg:text-lg lg:h-12 lg:px-6 lg:py-4`}
-          variant={index === currentMenuIndex ? "default" : "secondary"}
-          ref={(element) => {if (element) menuRef.current[index] = element}}
-          tabIndex={index === currentMenuIndex ? 0 : -1}
-          >
-            <MenuIcon type={item.iconType} color={index === currentMenuIndex ? "var(--secondary)" : "var(--primary)"}/>
-            {item.title}
-        </Button>
-      ))}
-    </ul>
-  )
+         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+            <AlertDialogContent>
+               <AlertDialogHeader className='w-full flex flex-col justify-center items-center'>
+                  <MessageSquareWarning size={40} className='my-7'/>
+                  <AlertDialogTitle className='text-2xl font-bold'>
+                     Hapus Progres dan Ulangi Lakon?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className='my-3 text-center'>Perhatian: Memulai bab ini dari awal akan menghapus progres tersimpan Anda. Perjalanan Anda sebelumnya tidak dapat dipulihkan.</AlertDialogDescription>
+               </AlertDialogHeader>
+
+               <AlertDialogFooter className='w-full h-fit flex flex-col sm:flex-col'>
+                  <AlertDialogAction
+                     onClick={() => {
+                        animatePageOut({
+                           href: `/play/${selectedChapterId}?mode=new`,
+                           router,
+                           animate: "fade"
+                        })
+                     }}
+                     className='w-full'>
+                        Mulai Baru
+                  </AlertDialogAction>
+                  <AlertDialogCancel
+                     className='w-full'>
+                        Kembali
+                  </AlertDialogCancel>
+               </AlertDialogFooter>
+            </AlertDialogContent>
+         </AlertDialog>
+      </>
+   )
 }
 
 export default GameMenuNavigation

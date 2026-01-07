@@ -1,9 +1,7 @@
 import Loader from '@/components/Loader'
-import { useSession } from '@/hooks/useSession'
 import { Slide } from '@/schema/GameSchema'
 import { useTypingAnimation } from '@/stores/useTypingAnimation'
 import { AnimatePresence, motion } from 'motion/react'
-import React, { unstable_SuspenseList } from 'react'
 
 export default function Choice({
    isSendingChoice,
@@ -14,12 +12,11 @@ export default function Choice({
    slide: Slide,
    handleActionChoice: (choice: number | null) => void
 }) {
-   const { sessionData, mutateSession } = useSession()
    const { animationDone } = useTypingAnimation()
 
    return (
       <AnimatePresence>
-         {slide !== undefined && animationDone && (slide?.choices.length > 0 || isSendingChoice) && (
+         {slide && animationDone && ((slide?.choices && (slide?.choices.length > 0)) || isSendingChoice) && (
             <motion.div
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
@@ -39,7 +36,12 @@ export default function Choice({
                            >
                               {/* background */}
                               <div className="absolute -z-1 w-full h-full bg-tertiary blur-md group-hover:blur-2xl transition-all duration-200 ease-in-out"></div>
-                              {choice.text}
+                              {
+                                 choice.text.split(" ").map((word, index) => {
+                                    const clean = word.replace(/[{}]/g, "")
+                                    return <span key={index} className='text-secondary'>{clean} </span>
+                                 })
+                              }
                         </motion.button>
                      )
                   })}

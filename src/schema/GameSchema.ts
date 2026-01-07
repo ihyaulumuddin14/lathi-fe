@@ -10,13 +10,14 @@ export type Chapter = {
 
 export type Slide = {
    id: string,
-   speaker_name: string | null,
-   background_image_url: string | null,
-   character_on_screen: {
+   background_image_url: string,
+   characters: {
+      name: string,
       image_url: string,
-      position: "left" | "right",
       is_active: boolean
    }[],
+   audio_file_url: string,
+   speaker_name: string,
    content: string | null,
    next_slide_id: string | null,
    vocabularies: Vocabulary[],
@@ -41,7 +42,7 @@ export type Session = {
    current_hearts: number,
    is_game_over: boolean,
    is_completed: boolean,
-   history_log: History[]
+   history_log: History[],
 }
 
 export type History = {

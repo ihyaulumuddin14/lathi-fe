@@ -90,7 +90,7 @@ export default function Dictionary({ slide }: DictionaryProps) {
                </DrawerHeader>
 
                <main className='h-full overflow-y-auto px-4 flex flex-col gap-2'>
-                  {(sortBy === "ASC" ? 
+                  {slide?.vocabularies ? (sortBy === "ASC" ? 
                      slide?.vocabularies.sort((a, b) => a.word_krama.localeCompare(b.word_krama)) : 
                      slide?.vocabularies.sort((a, b) => b.word_krama.localeCompare(a.word_krama)))
                         .filter(vocab => {
@@ -115,18 +115,24 @@ export default function Dictionary({ slide }: DictionaryProps) {
                                     <h3 className="text-2xl font-bold pb-2 px-4">{vocab.word_krama}</h3>
                                     <table className="w-full border rounded-md">
                                        <thead className="border">
-                                          <th className="border">Indonesia</th>
-                                          <th className="border">Ngoko</th>
+                                          <tr className="w-full">
+                                             <th className="border">Indonesia</th>
+                                             <th className="border">Ngoko</th>
+                                          </tr>
                                        </thead>
                                        <tbody className="border text-center">
-                                          <td className="border">{vocab.word_indo}</td>
-                                          <td className="border">{vocab.word_ngoko}</td>
+                                          <tr className="w-full">
+                                             <td className="border">{vocab.word_indo}</td>
+                                             <td className="border">{vocab.word_ngoko}</td>
+                                          </tr>
                                        </tbody>
                                     </table>
                                  </div>
                               </div>
                            )
                      }
+                  ) : (
+                     <div className='w-full my-3 flex justify-center items-center'>Tidak ada kata sulit</div>
                   )}
                </main>
 

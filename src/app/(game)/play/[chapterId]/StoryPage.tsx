@@ -1,28 +1,29 @@
 'use client'
 
 import GameStats from "@/components/game-stats/GameStats"
-import CharDialog from "./CharDialog"
-import GameMenuOption from "./GameMenuOption"
-import Log from "./Log"
-import Dictionary from "./Dictionary"
-import Choice from "./Choice"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/hooks/useSession"
 import { useSlides } from "@/hooks/useSlides"
-import { Session, Slide } from "@/schema/GameSchema"
+import { Slide } from "@/schema/GameSchema"
+import { actionStory } from "@/services/stories.service"
+import { useGameInfo } from "@/stores/useGameInfo"
+import { useTypingAnimation } from "@/stores/useTypingAnimation"
+import { AxiosError } from "axios"
 import { Volume2, VolumeX } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
-import { useEffect, useReducer, useState } from "react"
-import { useGameInfo } from "@/stores/useGameInfo";
-import { actionStory } from "@/services/stories.service"
-import { AxiosError } from "axios"
+import Image from "next/image"
+import { useCallback, useEffect, useReducer, useState } from "react"
 import { toast } from "sonner"
-import { useTypingAnimation } from "@/stores/useTypingAnimation"
+import CharDialog from "./CharDialog"
+import Choice from "./Choice"
+import Dictionary from "./Dictionary"
+import EndingDisplay from "./EndingDisplay"
+import GameMenuOption from "./GameMenuOption"
+import Log from "./Log"
 
 export type charReaction = "normal" | "angry" | "happy"
 
-export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
+export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean, mode: "new" | "continue" }) {
    const { slides } = useSlides(shouldFetch)
    const { sessionData, error, mutateSession } = useSession()
    const { selectedChapterId } = useGameInfo()
@@ -31,20 +32,134 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
    const [isMuted, setIsMuted] = useState(false)
    const [isAuto, setIsAuto] = useState(false)
    const [characterReaction, setCharacterReaction] = useState<charReaction | string>("normal")
-   const [plotSlideId, setPlotSlideId] = useState<string[]>([])
+   const [endingMessage, setEndingMessage] = useState<string | undefined>(undefined)
 
+
+   /*
+      slide management
+      using reducer to control the next slide
+      base on user choice or default next slide
+   */ 
    const slideReducer = (_slides: Slide | undefined, action: { nextSlideId: string }) => {
       if (slides == undefined) return 
       return slides.find(slide => slide.id === action.nextSlideId)
    }
+   
+   const [slide, dispatch] = useReducer(slideReducer, (
+      slides && sessionData && slides.find(slide => slide.id === sessionData.current_slide_id)
+   ))
+   
+   // useEffect(() => {
+   //    console.log(slide)
+   // }, [slide])
+   
+   useEffect(() => {
+      if (slides && sessionData) {
+         dispatch({ nextSlideId: sessionData.current_slide_id })
+      }
+   }, [slides, sessionData])
 
-   const [slide, dispatch] = useReducer(slideReducer, slides.find(slide => slide.id === sessionData.current_slide_id))
 
+   /*
+      warning massage popped,
+      when the hearts have been reduced
+   */
+   const warningMessageGenerator = (remainingHearts: number) => {
+      const mediumWarning = [
+         "Hubungan mulai memudar...",
+         "Kepercayaan tokoh mulai terkikis.",
+         "Ada rasa kecewa yang terselip.",
+         "Lawan bicara mulai tersinggung.",
+         "Hati-hati, satu detak jantung hilang."
+      ]
+      const criticalWarning = [
+         "Kesempatanmu kian menipis.",
+         "Waspada, nyawamu kini tersisa 1.",
+         "Kata-katamu melukai perasaannya.",
+         "Suasana mendadak dingin.",
+         "Nyawa berkurang! Berhati-hatilah."
+      ]
+      const goodByToast = [
+         "Detak jantung terakhirmu memudar..",
+         "Napasmu terhenti, tak ada harapan lagi..",
+         "Habis sudah kesempatanmu kali ini.",
+         "Sudah saatnya belajar lebih sopan.",
+         "Rasa hormat mereka padamu telah sirna."
+      ]
+
+      const index = ((Math.floor(Math.random() * 10) + 1)) % 5
+      
+      switch (remainingHearts) {
+         case 2: return mediumWarning[index]
+         case 1: return criticalWarning[index]
+         default: return goodByToast[index]
+      }
+   }
+
+
+   /*
+      action that called to switch the another slide
+      handle game reaction, like character expression, hearts warning toast, etc.
+   */
+   const handleActionStory = useCallback(async (choice: number | null) => {
+      if (!selectedChapterId || !slide) return
+
+      if (choice !== null) setIsSendingChoice(true)
+
+      try {
+         const response = await actionStory(selectedChapterId, slide?.id, choice)
+         
+         if (response.success) {
+            if (choice !== null) {
+               if (response.data.remaining_hearts < sessionData.current_hearts) {
+                  const warningMessage = warningMessageGenerator(response.data.remaining_hearts)
+                  toast.warning(warningMessage)
+                  setCharacterReaction("angry")
+               } else {
+                  setCharacterReaction("happy")
+               }
+            } else {
+               setCharacterReaction("normal")
+            }
+
+            mutateSession(
+               {
+                  ...sessionData,
+                  current_slide_id: response.data.next_slide_id,
+                  current_hearts: response.data.remaining_hearts,
+                  is_game_over: response.data.is_game_over,
+                  is_completed: response.data.is_completed,
+                  history_log: response.data.history_log
+               },
+               true
+            )
+         }
+
+         if (response.data.is_game_over || response.data.is_completed) {
+            console.log("ending message", response.data.message)
+            setEndingMessage(response.data.message)
+         }
+      } catch (error) {
+         if (error instanceof AxiosError) {
+            toast.error(error.response?.data?.error.message || "Terjadi kesalahan pada sistem")
+         } else {
+            toast.error("Terjadi kesalahan pada sistem")
+         }
+      } finally {
+         setIsSendingChoice(false)
+      }
+   }, [mutateSession, selectedChapterId, sessionData, slide]) 
+
+
+   /*
+      read time for user
+      when auto was enabled
+   */
    useEffect(() => {
       let timeoutReadDialog: NodeJS.Timeout;
 
-      if (isAuto && animationDone) {
-         if (slide && (slide?.choices.length === 0)) {
+      if (isAuto && animationDone && sessionData) {
+         if (slide && !slide.choices && !(sessionData.is_completed || sessionData.is_game_over)) {
             timeoutReadDialog = setTimeout(() => {
                handleActionStory(null)
             }, 2000)
@@ -54,109 +169,27 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
       return () => {
          clearTimeout(timeoutReadDialog)
       }
-   }, [isAuto, animationDone, slide])
-    
-   useEffect(() => {
-      if (slides) {
-         dispatch({ nextSlideId: sessionData.current_slide_id })
-      }
-   }, [sessionData, slides])
+   }, [isAuto, animationDone, slide, handleActionStory, sessionData])
 
-   useEffect(() => {
-      if (slide != undefined) {
-         setPlotSlideId(prev => [...prev, slide.id])
-      }
-   }, [slide])
 
-   const handleActionStory = async (choice: number | null) => {
-      if (!selectedChapterId || !slide) return
-
-      if (choice !== null) setIsSendingChoice(true)
-
-      try {
-         const response = await actionStory(selectedChapterId, slide?.id, choice)
-
-         if (response) {
-            mutateSession(
-               {...sessionData, current_slide_id: response.next_slide_id},
-               false
-            )
-            if (choice !== null) {
-               setCharacterReaction(response.character_reaction)
-            }
-            console.log(response.character_reaction)
-         }
-      } catch (error) {
-         if (error instanceof AxiosError) {
-            toast.error(error.response?.data?.message || "Terjadi kesalahan pada sistem")
-         } else {
-            toast.error("Terjadi kesalahan pada sistem")
-         }
-      } finally {
-         setIsSendingChoice(false)
-      }
+   /*
+      the loading screen, showed when user has hard refreshed screen on the middle of game,
+      but it doesn't showed when the user opened this page from loby, too fast data fetching
+   */
+   if (!slides) {
+      return (
+         <div className="bg-neutral-950 w-full h-screen flex flex-col gap-2 items-center justify-center">
+            <p className="text-secondary">100 %</p>
+            <p className="text-secondary">Menyiapkan Lakon...</p>
+         </div>
+      )
    }
+
 
    return (
       <div className='w-full h-screen bg-secondary relative'>
          {/* background */}
          <Image src={"/game_bg_dummy.webp"} alt="story_background_image" fill className="object-cover brightness-50 z-0"/>
-
-         {/* character container */}
-         <div className="z-1 absolute bottom-20 lg:bottom-5 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full overflow-visible">
-            {/* character a */}
-            <AnimatePresence mode="popLayout">
-               {slide?.character_on_screen[0] && (
-                  <motion.div
-                     key="char-a"
-                     initial={{ opacity: 0 }}
-                     exit={{ opacity: 0 }}
-                     animate={{
-                        opacity: slide.character_on_screen[0].is_active ? 1 : 0.5,
-                        x: slide.character_on_screen[0].is_active ? 0 : -200,
-                        scale: slide.character_on_screen[0].is_active ? 1.3 : 1
-                      }}
-                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                     className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
-                        <Image src={slide?.character_on_screen[0].image_url} fill alt="char_img" className="object-cover"/>
-                  </motion.div>
-               )}
-            </AnimatePresence>
-
-            {/* character b */}
-            <AnimatePresence mode="popLayout">
-               {slide?.character_on_screen[1] && (
-                  <motion.div
-                     key="char-b"
-                     initial={{ opacity: 0 }}
-                     exit={{ opacity: 0 }}
-                     animate={{
-                        opacity: slide.character_on_screen[1].is_active ? 1 : 0.5,
-                        x: slide.character_on_screen[1].is_active ? 0 : 200,
-                        scale: slide.character_on_screen[1].is_active ? 1.3 : 1
-                      }}
-                     transition={{ duration: 0.5, ease: "easeInOut" }}
-                     className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
-                        <Image src={slide.character_on_screen[1].image_url} fill alt="char_img" className="object-cover"/>
-                  </motion.div>
-               )}
-            </AnimatePresence>
-         </div>
-
-         {/* dialog box */}
-         {slide !== undefined && <CharDialog
-               slide={slide}
-               characterReaction={characterReaction}
-            />
-         }
-
-         {/* choice */}
-         {slide !== undefined && <Choice
-               isSendingChoice={isSendingChoice}
-               slide={slide}
-               handleActionChoice={handleActionStory}
-            />
-         }
 
          {/* top navbar */}
          <div className="z-5 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -166,10 +199,65 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
             {/* menu and log */}
             <div className="flex flex-col gap-3 w-fit h-full items-end">
                <GameMenuOption />
-               <Log slides={slides} plotSlideId={plotSlideId}/>
+               <Log/>
                {slide && <Dictionary slide={slide}/>}
             </div>
          </div>
+
+         {/* character container */}
+         <div className="z-1 absolute bottom-20 lg:bottom-5 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full overflow-visible">
+            {/* character a */}
+            <AnimatePresence mode="popLayout">
+               {slide?.characters && slide?.characters[0] && (
+                  <motion.div
+                     key="char-a"
+                     initial={{ opacity: 0 }}
+                     exit={{ opacity: 0 }}
+                     animate={{
+                        opacity: slide.characters[0].is_active ? 1 : 0.5,
+                        x: slide.characters[0].is_active ? 0 : -200,
+                        scale: slide.characters[0].is_active ? 1.3 : 1
+                      }}
+                     transition={{ duration: 0.5, ease: "easeInOut" }}
+                     className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
+                        <Image
+                           src={"/game_char_dummy.webp"}
+                           // src={slide?.characters[0].image_url}
+                           fill alt="char_img" className="object-cover"
+                           />
+                  </motion.div>
+               )}
+            </AnimatePresence>
+
+            {/* character b */}
+            <AnimatePresence mode="popLayout">
+               {slide?.characters && slide.characters[1] && (
+                  <motion.div
+                     key="char-b"
+                     initial={{ opacity: 0 }}
+                     exit={{ opacity: 0 }}
+                     animate={{
+                        opacity: slide.characters[1].is_active ? 1 : 0.5,
+                        x: slide.characters[1].is_active ? 0 : 200,
+                        scale: slide.characters[1].is_active ? 1.3 : 1
+                      }}
+                     transition={{ duration: 0.5, ease: "easeInOut" }}
+                     className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
+                        <Image
+                           src={"/game_char_dummy.webp"}
+                           // src={slide.characters[1].image_url}
+                           fill alt="char_img" className="object-cover"
+                           />
+                  </motion.div>
+               )}
+            </AnimatePresence>
+         </div>
+
+         {/* choice */}
+         {slide && <Choice isSendingChoice={isSendingChoice} slide={slide} handleActionChoice={handleActionStory}/>}
+
+         {/* dialog box */}
+         {slide && <CharDialog slide={slide} characterReaction={characterReaction}/>}
 
          {/* bottom navbar */}
          <div className="z-3 w-full max-w-[1280px] h-[50px] px-[4vw] absolute bottom-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -207,7 +295,7 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
                </AnimatePresence>
             </div>
 
-            {slide?.choices.length === 0 && animationDone && !isAuto && (
+            {!slide?.choices && animationDone && !isAuto && (sessionData && !(sessionData.is_completed || sessionData.is_game_over)) && (
                <Button
                   className="text-2xl py-5 px-6 font-bold text-primary border-4 border-muted shadow-md shadow-secondary"
                   variant={"secondary"}
@@ -219,6 +307,9 @@ export default function StoryPage({ shouldFetch }: { shouldFetch: boolean }) {
                </Button>
             )}
          </div>
+
+         {/* ending display */}
+         {(sessionData && (sessionData.is_game_over || sessionData.is_completed)) && animationDone && <EndingDisplay message={endingMessage} />}
       </div>
    )
 }

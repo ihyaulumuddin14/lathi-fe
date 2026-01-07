@@ -10,7 +10,6 @@ const Verify = () => {
    const token = searchParams.get("token")
 
    const redirectToLogin = async (token: string) => {
-      console.log(token)
       try {
          const response = await verifyService({ token })
 

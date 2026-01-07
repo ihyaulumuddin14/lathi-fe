@@ -14,6 +14,7 @@ import gsap from "gsap"
 import SplitText from 'gsap/src/SplitText'
 import { useGSAP } from '@gsap/react'
 import { useTypingAnimation } from '@/stores/useTypingAnimation'
+import { useMenu } from '@/stores/useMenu'
 
 type CharDialogProps = {
    slide: Slide,
@@ -22,18 +23,52 @@ type CharDialogProps = {
 
 export default function CharDialog({ slide, characterReaction }: CharDialogProps ) {
    const [vocabs, setVocabs] = useState<Vocabulary[]>([])
+   const [finalContent, setFinalContent] = useState<React.ReactNode>([])
    const dialogRef = useRef<HTMLParagraphElement>(null)
    const { animationDone, setAnimationDone } = useTypingAnimation()
+   const { isOpenGameMenu } = useMenu()
 
    useEffect(() => {
       setAnimationDone(false)
-   }, [slide.id])    
+   }, [slide.id, setAnimationDone])    
    
    useEffect(() => {
       if (slide) {
          setVocabs(slide.vocabularies as Vocabulary[])
       }
    }, [slide])
+
+   useEffect(() => {
+      let vocabIndex = 0;
+
+      const content = slide.content?.split(" ").map((word, index) => {
+         const clean = word.replace(/[{}]/g, "")
+         const isVocab = word.includes("{") && word.includes("}")
+         
+         if (!isVocab) {
+            return <span key={index}>{clean} </span>
+         }
+         
+         const vocab = vocabs && vocabs[vocabIndex++]
+         if (!vocab) return <span key={index}>{clean} </span>
+         
+         return (
+            <Popover key={index}>
+               <PopoverTrigger asChild>
+               <span className="cursor-pointer">
+                  <strong>{clean}</strong>{" "}
+               </span>
+               </PopoverTrigger>
+               <PopoverContent side="top" className="w-fit">
+               <p><b>Krama:</b> {vocab.word_krama}</p>
+               <p><b>Ngoko:</b> {vocab.word_ngoko}</p>
+               <p><b>Indonesia:</b> {vocab.word_indo}</p>
+               </PopoverContent>
+            </Popover>
+         )
+         })
+      setFinalContent(content)
+   }, [vocabs, slide])
 
    useGSAP(() => {
       if (!dialogRef.current || animationDone) return
@@ -53,41 +88,17 @@ export default function CharDialog({ slide, characterReaction }: CharDialogProps
           setAnimationDone(true)
         }
       })
+
+      if (isOpenGameMenu) {
+         gsap.globalTimeline.pause()
+      } else {
+         gsap.globalTimeline.resume()
+      }
     
       return () => {
         split.revert()
       }
-    }, [slide.id, animationDone])
-    
-   
-   let vocabIndex = 0;
-   
-   const finalContent = slide.content?.split(" ").map((word, index) => {
-      const clean = word.replace(/[{}]/g, "")
-      const isVocab = word.includes("{") && word.includes("}")
-    
-      if (!isVocab) {
-        return <span key={index}>{clean} </span>
-      }
-    
-      const vocab = vocabs[vocabIndex++]
-      if (!vocab) return <span key={index}>{clean} </span>
-    
-      return (
-        <Popover key={index}>
-          <PopoverTrigger asChild>
-            <span className="cursor-pointer">
-              <strong>{clean}</strong>{" "}
-            </span>
-          </PopoverTrigger>
-          <PopoverContent side="top" className="w-fit">
-            <p><b>Krama:</b> {vocab.word_krama}</p>
-            <p><b>Ngoko:</b> {vocab.word_ngoko}</p>
-            <p><b>Indonesia:</b> {vocab.word_indo}</p>
-          </PopoverContent>
-        </Popover>
-      )
-    })
+    }, [slide.id, animationDone, isOpenGameMenu])
 
    const rawContent = slide.content?.split(" ").map((word, index) => {
       const clean = word.replace(/[{}]/g, "")
@@ -105,7 +116,7 @@ export default function CharDialog({ slide, characterReaction }: CharDialogProps
    })
 
    return (
-      <div className="z-5 w-[90vw] max-w-3xl min-h-[150px] border-2 border-secondary bg-primary absolute bottom-20 lg:bottom-5 left-1/2 -translate-x-1/2 rounded-b-xl sm:rounded-b-2xl h-fit sm:text-xl text-base">
+      <div className="z-5 w-[90vw] max-w-3xl min-h-[150px] border-2 border-secondary bg-primary absolute bottom-20 xl:bottom-5 left-1/2 -translate-x-1/2 rounded-b-xl sm:rounded-b-2xl h-fit sm:text-xl text-base">
          <div className="w-full h-full bg-secondary absolute -z-1 mask-b-from-30% mask-b-to-200% rounded-b-xl sm:rounded-b-2xl overflow-hidden">
             <div className="w-full h-full bg-[url(/game_dialog_bg.webp)] bg-cover bg-center absolute opacity-40 mask-t-from-30% mask-t-to-150%"></div>
          </div>
@@ -118,7 +129,7 @@ export default function CharDialog({ slide, characterReaction }: CharDialogProps
          </motion.p>
 
          <AnimatePresence mode="popLayout">
-            {slide?.character_on_screen[0]?.is_active && (
+            {slide?.characters && slide?.characters[0]?.is_active && (
                <motion.h1
                   key="char-a"
                   initial={{ scale: 0 }}
@@ -129,7 +140,7 @@ export default function CharDialog({ slide, characterReaction }: CharDialogProps
                      {slide?.speaker_name}
                </motion.h1>
             )}
-            {slide?.character_on_screen[1]?.is_active && (
+            {slide?.characters && slide?.characters[1]?.is_active && (
                <motion.h1
                   key="char-b"
                   initial={{ scale: 0 }}

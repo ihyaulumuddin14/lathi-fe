@@ -2,89 +2,96 @@
 
 import { useSlides } from "@/hooks/useSlides"
 import { useEffect, useState } from "react"
-import ProtectedPlay from "./ProtectedPlay"
 import { AnimatePresence, motion } from "motion/react";
 import { useGameInfo } from "@/stores/useGameInfo";
 import { startStory } from "@/services/stories.service";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import StoryPage from "./StoryPage";
+import { useSearchParams } from "next/navigation";
 
+type modeType = "new" | "continue"
 
 export default function PlaySessionPage() {
+   const searchParams = useSearchParams()
+   const mode = searchParams.get("mode")
+
    const [progress, setProgress] = useState(0)
    const [shouldFetch, setShouldFetch] = useState(false)
    const { selectedChapterId } = useGameInfo()
-   const { slides, error, isLoading } = useSlides(shouldFetch)
+   const { slides, error } = useSlides(shouldFetch)
 
    useEffect(() => {
-      if (!selectedChapterId) return
-      
       const handleStartStory = async () => {
+         if (!selectedChapterId) return
+         
          try {
-            await startStory(selectedChapterId)
-            
-            setShouldFetch(true)
+            const response = await startStory(selectedChapterId)
+            if (response.success) {
+               setShouldFetch(true)
+            } else {
+               throw Error()
+            }
          } catch (error) {
             if (error instanceof AxiosError) {
-               toast.error(error.response?.data?.message || "Terjadi kesalahan pada sistem")
+               toast.error(error.response?.data?.error.message || "Terjadi kesalahan pada sistem")
             } else {
                toast.error("Terjadi kesalahan pada sistem")
             }
          }
       }
 
-      handleStartStory()
-   }, [selectedChapterId])
+      if (mode === "new") {
+         handleStartStory()
+      } else if (mode === "continue") {
+         setShouldFetch(true)
+      }
+   }, [selectedChapterId, mode])
 
    useEffect(() => {
-      if (!shouldFetch) return
+      const intervalProgress = setInterval(() => {
+         setProgress(prev => prev < 99 ? prev + 1 : prev)
+      }, 100);
 
-      let intervalProgress: NodeJS.Timeout;
-
-      if (isLoading) {
-         intervalProgress = setInterval(() => {
-            setProgress(prev => prev < 90 ? prev + 4 : prev)
-         }, 100)
-      } else {
+      if (slides) {
          setProgress(100)
       }
 
       return () => {
-         setProgress(0)
-         clearInterval(intervalProgress)
+         if (intervalProgress) {
+            clearInterval(intervalProgress)
+         }
       }
-   }, [isLoading, shouldFetch])
+   }, [slides, error])
+   
 
    return (
-      <ProtectedPlay>
-         <AnimatePresence mode="popLayout">
-            {(isLoading || progress < 100) ? (
-               <motion.section
-                  key="loading"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1, ease: "easeInOut" }}
-                  className="bg-neutral-950 w-full h-screen flex flex-col gap-2 items-center justify-center"
-               >
-                  <p className="text-secondary">{progress} %</p>
-                  <p className="text-secondary">Menyiapkan Lakon...</p>
-               </motion.section>
-            ) : (
-               <motion.section
-                  key="game"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1, ease: "easeInOut" }}
-                  className="overflow-hidden bg-secondary w-full h-screen flex items-center justify-center"
-               >
-                  {/* main page */}
-                  <StoryPage shouldFetch={shouldFetch}/>
-               </motion.section>
-            )}
-         </AnimatePresence>
-      </ProtectedPlay>
+      <AnimatePresence mode="wait" initial={false}>
+         {!slides ? (
+            <motion.section
+               key="loading"
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               transition={{ duration: 1, ease: "easeInOut" }}
+               className="bg-neutral-950 w-full h-screen flex flex-col gap-2 items-center justify-center"
+            >
+               <p className="text-secondary">{progress} %</p>
+               <p className="text-secondary">Menyiapkan Lakon...</p>
+            </motion.section>
+         ) : (
+            <motion.section
+               key="game"
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               transition={{ duration: 1, ease: "easeInOut" }}
+               className="overflow-hidden bg-secondary w-full h-screen flex items-center justify-center"
+            >
+               {/* main page */}
+               <StoryPage shouldFetch={shouldFetch} mode={mode as modeType}/>
+            </motion.section>
+         )}
+      </AnimatePresence>
    )
 }
