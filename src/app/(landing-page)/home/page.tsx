@@ -16,7 +16,7 @@ export default async function Home({ searchParams } : HomeProps) {
 
   return (
     <main className="w-full h-fit text-center min-h-screen relative overflow-x-hidden text-lg">
-      <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10 z-0"/>
+      <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg_hero.webp)] bg-cover opacity-10 z-0"/>
       <Hero verified={verificationResult}/>
       <Features />
       <Problem />

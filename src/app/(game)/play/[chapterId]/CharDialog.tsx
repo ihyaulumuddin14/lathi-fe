@@ -10,11 +10,13 @@ import {
    PopoverTrigger,
  } from "@/components/ui/popover"
 import { charReaction } from './StoryPage'
-import gsap from "gsap"
-import SplitText from 'gsap/src/SplitText'
 import { useGSAP } from '@gsap/react'
 import { useTypingAnimation } from '@/stores/useTypingAnimation'
 import { useMenu } from '@/stores/useMenu'
+import { useAudio } from '@/hooks/useAudio'
+import gsap from "gsap"
+import SplitText from 'gsap/src/SplitText'
+import { useGameInfo } from '@/stores/useGameInfo'
 
 type CharDialogProps = {
    slide: Slide,
@@ -24,13 +26,29 @@ type CharDialogProps = {
 export default function CharDialog({ slide, characterReaction }: CharDialogProps ) {
    const [vocabs, setVocabs] = useState<Vocabulary[]>([])
    const [finalContent, setFinalContent] = useState<React.ReactNode>([])
+   const [isTyping, setIsTyping] = useState(false)
    const dialogRef = useRef<HTMLParagraphElement>(null)
    const { animationDone, setAnimationDone } = useTypingAnimation()
+   const { sfxValue } = useGameInfo()
    const { isOpenGameMenu } = useMenu()
+   const { play, stop } = useAudio({ src: "/sound/sfx_typing.mp3", baseVolume: sfxValue })
+   const tweenRef = useRef<gsap.core.Tween | null>(null)
+
+   useEffect(() => {
+      if (!isTyping || isOpenGameMenu) {
+         stop()
+         return
+      }
+
+      play()
+
+      return () => stop()
+   }, [isTyping, isOpenGameMenu])
 
    useEffect(() => {
       setAnimationDone(false)
-   }, [slide.id, setAnimationDone])    
+      setIsTyping(true)
+   }, [slide.id, setAnimationDone, setIsTyping])    
    
    useEffect(() => {
       if (slide) {
@@ -76,23 +94,24 @@ export default function CharDialog({ slide, characterReaction }: CharDialogProps
       const split = SplitText.create(dialogRef.current, {
         type: "chars, words"
       })
-    
+
       gsap.set(split.chars, { visibility: "hidden" })
     
-      gsap.to(split.chars, {
+      tweenRef.current = gsap.to(split.chars, {
         visibility: "visible",
         stagger: 0.07,
         ease: "none",
         onComplete: () => {
           split.revert()
+          setIsTyping(false)
           setAnimationDone(true)
         }
       })
 
       if (isOpenGameMenu) {
-         gsap.globalTimeline.pause()
+         tweenRef.current?.pause()
       } else {
-         gsap.globalTimeline.resume()
+         tweenRef.current?.resume()
       }
     
       return () => {

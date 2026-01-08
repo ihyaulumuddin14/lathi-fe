@@ -1,14 +1,16 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
+import { Slider } from "@/components/ui/slider"
 import { useSession } from "@/hooks/useSession"
 import { startStory } from "@/services/stories.service"
 import { useGameInfo } from "@/stores/useGameInfo"
 import { useMenu } from "@/stores/useMenu"
+import { useTypingAnimation } from "@/stores/useTypingAnimation"
 import { animatePageOut } from "@/utils/animation"
 import { AxiosError } from "axios"
-import { LogOut, Menu, MessageSquareWarning, RotateCcw, StepForward } from "lucide-react"
+import { HeadphoneOff, Headphones, LogOut, Menu, MessageSquareWarning, RotateCcw, StepForward, Volume2, VolumeX } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useShallow } from "zustand/shallow"
 
@@ -19,10 +21,49 @@ export default function GameMenuOption() {
          setIsOpenGameMenu: state.setIsOpenGameMenu
       }))
    )
+   const { musicValue, sfxValue, setMusicValue, setSfxValue } = useGameInfo(
+      useShallow(state => ({
+         musicValue: state.musicValue,
+         sfxValue: state.sfxValue,
+         setMusicValue: state.setMusicValue,
+         setSfxValue: state.setSfxValue
+      }))
+   )
    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
+   const [isMusicMuted, setIsMusicMuted] = useState(false)
+   const [isSfxMuted, setIsSfxMuted] = useState(false)
+   const { animationDone, setAnimationDone } = useTypingAnimation()
    const { selectedChapterId } = useGameInfo()
    const { mutateSession } = useSession()
    const router = useRouter()
+
+   useEffect(() => {
+      if (isMusicMuted) {
+         setMusicValue(0)
+      }
+   }, [isMusicMuted])
+   
+   useEffect(() => {
+      if (musicValue === 0) {
+         setIsMusicMuted(true)
+      } else {
+         setIsMusicMuted(false)
+      }
+   }, [musicValue])
+
+   useEffect(() => {
+      if (isSfxMuted) {
+         setSfxValue(0)
+      }
+   }, [isSfxMuted])
+   
+   useEffect(() => {
+      if (sfxValue === 0) {
+         setIsSfxMuted(true)
+      } else {
+         setIsSfxMuted(false)
+      }
+   }, [sfxValue])
 
    const handleRestartSession = async () => {
       if (!selectedChapterId) return
@@ -33,6 +74,7 @@ export default function GameMenuOption() {
          const response = await startStory(selectedChapterId)
 
          if (response.success) {
+            if (!animationDone) setAnimationDone(true)
             mutateSession()
          } else {
             throw Error()
@@ -79,6 +121,63 @@ export default function GameMenuOption() {
                   </AlertDialogTitle>
                </AlertDialogHeader>
 
+               
+               {/* music settings */}
+               <div className="w-full h-fit rounded-md flex gap-4 justify-center items-center">
+                  <AnimatePresence mode="popLayout">
+                     <motion.button
+                        className="bg-secondary rounded-full border-2 border-primary cursor-pointer p-2 flex justify-between items-center"
+                        onClick={() => setIsMusicMuted(prev => !prev)}
+                        key={isMusicMuted ? "mute" : "unmute"}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        >
+                        {isMusicMuted ? <HeadphoneOff size={25} color="#3F2305"/> : <Headphones size={25} color="#3F2305"/> }
+                     </motion.button>
+                  </AnimatePresence>
+                  <p className="font-bold text-lg text-primary w-[100px]">Musik</p>
+                  <div className="w-full h-full flex justify-start items-center">
+                     <Slider
+                        value={[musicValue]}
+                        onValueChange={(val) => setMusicValue(val[0])}
+                        max={1}
+                        min={0}
+                        step={0.001}
+                        className="w-full"
+                     />
+                  </div>
+               </div>
+
+               {/* sfx settings */}
+               <div className="w-full h-fit rounded-md flex gap-4 justify-center items-center">
+                  <AnimatePresence mode="popLayout">
+                     <motion.button
+                        className="bg-secondary rounded-full border-2 border-primary cursor-pointer p-2 flex justify-between items-center"
+                        onClick={() => setIsSfxMuted(prev => !prev)}
+                        key={isSfxMuted ? "mute" : "unmute"}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                        >
+                        {isSfxMuted ? <VolumeX size={25} color="#3F2305"/> : <Volume2 size={25} color="#3F2305"/> }
+                     </motion.button>
+                  </AnimatePresence>
+                  <p className="font-bold text-lg text-primary w-[100px]">SFX</p>
+                  <div className="w-full h-full flex justify-start items-center">
+                     <Slider
+                        value={[sfxValue]}
+                        onValueChange={(val) => setSfxValue(val[0])}
+                        max={1}
+                        min={0}
+                        step={0.001}
+                        className="w-full"
+                     />
+                  </div>
+               </div>
+               
 
                {/* body */}
                <div className="w-full h-fit border-t-muted-foreground border-t flex justify-evenly items-center p-7 gap-5">

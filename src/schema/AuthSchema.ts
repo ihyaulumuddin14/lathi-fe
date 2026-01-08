@@ -32,3 +32,30 @@ export const LoginSchema = z.object({
 })
 
 export type LoginCredentials = z.infer<typeof LoginSchema>
+
+export type User = {
+   id: string,
+   username: string,
+   email: string,
+   avatar_url: string,
+   current_title: string,
+   stats: {
+      total_chapters: number,
+      completed_chapters: number,
+      progress_percent: number,
+      total_vocabs: number,
+      collected_vocabs: number
+   },
+   badges: Badge[],
+   leaderboard_info: {
+      rank: number,
+      score: number
+   }
+}
+
+export type Badge = {
+   name: string,
+   description: string,
+   icon_url: string,
+   earned_at: string
+}

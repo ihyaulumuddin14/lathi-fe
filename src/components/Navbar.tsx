@@ -18,6 +18,8 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { logoutService } from "@/services/auth.service";
@@ -25,6 +27,7 @@ import { AxiosError } from "axios";
 import { toast } from "sonner";
 import { animatePageOut } from "@/utils/animation";
 import { useShallow } from "zustand/shallow";
+import { useUser } from "@/hooks/useUser";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -38,27 +41,27 @@ export default function Navbar() {
       ${ pathname.startsWith("/play") ? "border-b border-muted" : ""}
       `}
     >
-      {pathname.startsWith("/play") ? <PlayNavbar /> : <MainNavbar />}
+      <MainNavbar />
     </nav>
   );
 }
 
-const PlayNavbar = () => {
-  const router = useRouter();
+// const PlayNavbar = () => {
+//   const router = useRouter();
 
-  const handleBack = () => {
-    router.back()
-  }
+//   const handleBack = () => {
+//     router.back()
+//   }
 
-  return (
-    <ul className="w-full flex items-center gap-3 py-3 px-7 sm:px-10">
-      <div onClick={handleBack} className="p-2 border border-muted rounded-md hover:bg-muted cursor-pointer">
-        <ChevronLeft />
-      </div>
-      <p className="text-lg font-bold">Kembali</p>
-    </ul>
-  );
-};
+//   return (
+//     <ul className="w-full flex items-center gap-3 py-3 px-7 sm:px-10">
+//       <div onClick={handleBack} className="p-2 border border-muted rounded-md hover:bg-muted cursor-pointer">
+//         <ChevronLeft />
+//       </div>
+//       <p className="text-lg font-bold">Kembali</p>
+//     </ul>
+//   );
+// };
 
 const MainNavbar = () => {
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -68,6 +71,7 @@ const MainNavbar = () => {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const { setAlertDialogType } = useAlertDialogIntercept();
   const { isOpenMenu, setIsOpenMenu } = useMenu();
+  const { user } = useUser()
 
   const { accessToken, setAccessToken } = useAuthStore(
    useShallow(state => ({
@@ -174,12 +178,14 @@ const MainNavbar = () => {
           <DropdownMenuTrigger asChild>
             <div className="w-fit rounded-full bg-background hover:scale-105 duration-75 transition-all ease-in-out active:scale-100 p-2 hover:bg-muted cursor-pointer">
               <User color="#3F2305" />
+              {/* <Image src={user?.avatar_url} alt="avatar_img"/> */}
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/2 w-fit">
-            {/* <DropdownMenuLabel className="text-center text-muted-foreground">
-              {user.username}
-            </DropdownMenuLabel> */}
+            <DropdownMenuLabel className="text-center text-muted-foreground">
+              {user?.username}
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem onSelect={() => {
                   animatePageOut({
@@ -199,6 +205,7 @@ const MainNavbar = () => {
               }}>
                 Main
               </DropdownMenuItem>
+              <DropdownMenuSeparator/>
               <DropdownMenuItem onSelect={handleLogout} variant="destructive">
                 Logout
               </DropdownMenuItem>

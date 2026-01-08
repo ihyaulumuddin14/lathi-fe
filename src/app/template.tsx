@@ -26,19 +26,11 @@ const Template = ({ children }: { children: React.ReactNode }) => {
 
    useEffect(() => {
       const fetchRefresh = async () => {
-         try {
-            const response = await refreshService()
+         const response = await refreshService()
 
-            if (response.success) {
-               setAccessToken(response.data.access_token)
-               toast.success(response.message)
-            }
-         } catch (error) {
-            if (error instanceof AxiosError) {
-               toast.error(error.response?.data.error.message || "Terjadi kesalahan pada sistem")
-            } else {
-               toast.error("Terjadi kesalahan pada sistem")
-            }
+         if (response.success) {
+            setAccessToken(response.data.access_token)
+            toast.success(response.message)
          }
       }
 

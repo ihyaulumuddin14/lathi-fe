@@ -11,16 +11,11 @@ import {
 import { useSession } from '@/hooks/useSession'
 import { ScrollText } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function Log() {
    const [isLogOpen, setIsLogOpen] = useState(false)
    const { sessionData } = useSession()
-
-   // useEffect(() => {
-   //    if (sessionData)
-   //       console.log(sessionData.history_log)
-   // }, [sessionData])
 
    return (
       <>
@@ -42,7 +37,7 @@ export default function Log() {
                   ) }
                </motion.button>
             </AnimatePresence>
-            <p className="text-secondary text-shadow-2xs text-shadow-primary">Riwayat</p>
+            <p className="text-secondary text-shadow-md text-shadow-primary ">Riwayat</p>
          </div>
 
          <Drawer open={isLogOpen} onOpenChange={setIsLogOpen} direction='right'>

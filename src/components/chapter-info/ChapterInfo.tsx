@@ -73,7 +73,7 @@ const ChapterInfo = () => {
                <h2 className="absolute z-2 text-md sm:text-xl italic uppercase text-secondary font-bold  bg-primary px-4 py-1 rounded-md shadow-lg shadow-accent-foreground w-fit">
                   Bagian {chapters.find(chapter => chapter.id === selectedChapterId)?.order_index}
                </h2>
-               <Image src={"/bg-hero.webp"} fill alt="chapter_image" className="rounded-full z-0 object-cover"/>
+               <Image src={"/bg_hero.webp"} fill alt="chapter_image" className="rounded-full z-0 object-cover"/>
                {sessionData && (
                   <p
                      className={`
@@ -115,7 +115,7 @@ const ChapterInfo = () => {
                   </AlertDialogTitle>
                </AlertDialogHeader>
                <div className="w-full grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-4">
-                  <Image src={"/bg-hero.webp"} alt="chapter_image" width={100} height={100} className="rounded-lg w-full max-w-[150px] aspect-3/4 object-cover border justify-self-center" loading="lazy"/>
+                  <Image src={"/bg_hero.webp"} alt="chapter_image" width={100} height={100} className="rounded-lg w-full max-w-[150px] aspect-3/4 object-cover border justify-self-center" loading="lazy"/>
                   <div className="w-full flex flex-col gap-1">
                      <h2 className="font-extrabold sm:text-left text-xl text-center sm:text-2xl uppercase sm:mb-2">{chapter?.title}</h2>
                      <p className="leading-5 mb-2">{chapter?.description}</p>

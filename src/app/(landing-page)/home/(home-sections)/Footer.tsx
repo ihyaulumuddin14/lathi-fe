@@ -103,7 +103,7 @@ const Footer = () => {
         <main className="w-full grid grid-cols-[1fr] sm:grid-cols-[1fr_1fr] gap-5 text-left justify-center items-center">
           <div className="w-full h-fit img-team flex gap-3">
             <div className="relative w-full aspect-4/5">
-              <Image src={"/ulum-photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
+              <Image src={"/ulum_photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
             </div>
             <div className="w-full">
               <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Ihya&apos; Ulumuddin</h3>
@@ -112,7 +112,7 @@ const Footer = () => {
           </div>
           <div className="w-full h-fit img-team flex gap-3">
             <div className="relative w-full aspect-4/5">
-              <Image src={"/abil-photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
+              <Image src={"/abil_photo.webp"} fill alt="developer_photo" className="saturate-50 object-cover"/>
             </div>
             <div className="w-full">
               <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Muhammad Hafizh Faiqunnabil</h3>

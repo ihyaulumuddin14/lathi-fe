@@ -189,7 +189,7 @@ const GameMenuNavigation = () => {
             >
             {lobyMenuLists.map((item, index) => (
             <Button
-               key={index}
+               key={item.title}
                onKeyDown={(e: KeyboardEvent<HTMLButtonElement>) => {
                   if (e.key === "Enter") {
                      if (isMenuAvailable(index)) setPressedIndex(index)

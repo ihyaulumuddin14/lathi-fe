@@ -53,7 +53,7 @@ const LobyLayout = ({ children }: { children: React.ReactNode }) => {
                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
             />
 
-            <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg-hero.webp)] bg-cover opacity-10 blur-sm"></div>
+            <div className="w-full h-screen fixed top-0 left-0 bg-[url(/bg_hero.webp)] bg-cover opacity-10 blur-sm"></div>
 
 
             {/* WRAPPER NAV MENU */}

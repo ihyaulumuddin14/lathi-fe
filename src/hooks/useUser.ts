@@ -1,10 +1,10 @@
 import { fetcher } from "@/utils/fetcher";
 import useSWR from "swr";
-import { User } from "@/stores/useAuthStore"
+import { User } from "@/schema/AuthSchema"
 
 export const useUser = () => {
-  const { data: user, error, isLoading, mutate: mutateUser } = useSWR(
-    "/api/v1/me",
+  const { data, error, isLoading, mutate: mutateUser } = useSWR(
+    "/users/profile",
     fetcher,
     {
       revalidateOnFocus: false,
@@ -13,7 +13,7 @@ export const useUser = () => {
   )
 
   return {
-    user: user as User,
+    user: data?.data as User,
     error,
     isLoading,
     mutateUser

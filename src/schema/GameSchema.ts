@@ -51,3 +51,14 @@ export type History = {
    is_user: boolean,
    timestamp: string
 }
+
+export type DictionaryItem = Vocabulary & {
+   is_locked: boolean
+}
+
+export type Pagination = {
+   current_page: number,
+   total_page: number,
+   total_items: number,
+   items_per_page: number
+}

@@ -98,7 +98,7 @@ const Problem = () => {
           <strong> Degradasi</strong> <i>unggah-ungguh</i> itu nyata, Rek! Jangan sampai identitas kita sebagai orang Jawa hilang cuma karena kita takut salah ngomong.
         </p>
         <div className="problem-image-wrapper w-full h-fit flex justify-center">
-          <Image src="/bg-hero.webp" width={500} height={500} alt="Problem" className="problem-image aspect-square object-cover rounded-2xl"/>
+          <Image src="/bg_hero.webp" width={500} height={500} alt="Problem" className="problem-image aspect-square object-cover rounded-2xl"/>
         </div>
       </main>
    </section>

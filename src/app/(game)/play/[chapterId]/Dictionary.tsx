@@ -49,7 +49,7 @@ export default function Dictionary({ slide }: DictionaryProps) {
                      <BookSearch size={20} color="#3F2305"/>
                   ) }
                </motion.button>
-               <p className="text-secondary text-shadow-2xs text-shadow-primary">Kata Sulit</p>
+               <p className="text-secondary text-shadow-md text-shadow-primary">Kata Sulit</p>
             </AnimatePresence>
          </div>
 

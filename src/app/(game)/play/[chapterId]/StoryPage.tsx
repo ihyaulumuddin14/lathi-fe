@@ -9,7 +9,6 @@ import { actionStory } from "@/services/stories.service"
 import { useGameInfo } from "@/stores/useGameInfo"
 import { useTypingAnimation } from "@/stores/useTypingAnimation"
 import { AxiosError } from "axios"
-import { Volume2, VolumeX } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Image from "next/image"
 import { useCallback, useEffect, useReducer, useState } from "react"
@@ -29,7 +28,6 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
    const { selectedChapterId } = useGameInfo()
    const [ isSendingChoice, setIsSendingChoice ] = useState<boolean>(false)
    const { animationDone } = useTypingAnimation()
-   const [isMuted, setIsMuted] = useState(false)
    const [isAuto, setIsAuto] = useState(false)
    const [characterReaction, setCharacterReaction] = useState<charReaction | string>("normal")
    const [endingMessage, setEndingMessage] = useState<string | undefined>(undefined)
@@ -264,20 +262,6 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
             <div className="flex gap-3 w-fit h-full items-center">
                <AnimatePresence mode="popLayout">
                   <motion.button
-                     className="bg-secondary rounded-full cursor-pointer p-2 flex justify-between items-center"
-                     onClick={() => setIsMuted(prev => !prev)}
-                     key={isMuted ? "mute" : "unmute"}
-                     initial={{ scale: 0 }}
-                     animate={{ scale: 1 }}
-                     exit={{ scale: 0 }}
-                     transition={{ duration: 0.2, ease: "easeInOut" }}
-                     >
-                     {isMuted ? <VolumeX size={32} color="#3F2305"/> : <Volume2 size={32} color="#3F2305"/> }
-                  </motion.button>
-               </AnimatePresence>
-
-               <AnimatePresence mode="popLayout">
-                  <motion.button
                      className="bg-secondary rounded-full cursor-pointer flex justify-between items-center"
                      onClick={() => setIsAuto(prev => !prev)}
                      key={isAuto ? "auto" : "manual"}
@@ -293,6 +277,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      ) }
                   </motion.button>
                </AnimatePresence>
+               <p className="font-bold text-lg text-secondary text-shadow-md text-shadow-primary">Auto</p>
             </div>
 
             {!slide?.choices && animationDone && !isAuto && (sessionData && !(sessionData.is_completed || sessionData.is_game_over)) && (

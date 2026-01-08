@@ -6,13 +6,45 @@ import { AxiosError } from 'axios'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import { LogOut, MessageSquareWarning, RotateCcw } from 'lucide-react'
 import { AnimatePresence, motion, Variants } from 'motion/react'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { animatePageOut } from '@/utils/animation'
 import { useRouter } from 'next/navigation'
+import { useAudio } from '@/hooks/useAudio'
+import { useShallow } from 'zustand/shallow'
 
 export default function EndingDisplay({ message }: { message?: string }) {
    const { sessionData } = useSession()
+   const { setIsEndingChapter, musicValue } = useGameInfo(
+      useShallow(state => ({
+         setIsEndingChapter: state.setIsEndingChapter,
+         musicValue: state.musicValue
+      }))
+   )
+   const { play: playCompletedMusic, stop: stopCompletedMusic } = useAudio({ src: "/sound/sfx_completed.mp3", baseVolume: musicValue, loop: true })
+   const { play: playGameOverMusic, stop: stopGameOverMusic } = useAudio({ src: "/sound/sfx_gameover.mp3", baseVolume: musicValue, loop: true })
+   
+   useEffect(() => {
+      if (!sessionData) return
+
+      if (sessionData.is_completed) {
+         playCompletedMusic()
+         setIsEndingChapter(true)
+      } else if (sessionData.is_game_over) {
+         playGameOverMusic()
+         setIsEndingChapter(true)
+      }
+      
+      return () => {
+         if (sessionData.is_completed) {
+            stopCompletedMusic()
+            setIsEndingChapter(false)
+         } else if (sessionData.is_game_over) {
+            stopGameOverMusic()
+            setIsEndingChapter(false)
+         }
+      }
+   }, [sessionData])
 
    return (
       <AnimatePresence mode='popLayout'>
