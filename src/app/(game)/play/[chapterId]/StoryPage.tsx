@@ -131,7 +131,6 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
          }
 
          if (response.data.is_game_over || response.data.is_completed) {
-            console.log("ending message", response.data.message)
             setEndingMessage(response.data.message)
          }
       } catch (error) {
