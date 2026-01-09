@@ -160,9 +160,9 @@ const MainNavbar = () => {
           <DropdownMenuTrigger asChild>
             <div className="w-fit rounded-full bg-background hover:scale-105 duration-75 transition-all ease-in-out active:scale-100 p-1 hover:bg-muted cursor-pointer relative">
               {user?.avatar_url ? (
-                 <Image src={user.avatar_url} alt="avatar_img" width={40} height={40} className="border rounded-full"/>
+                 <img src={user.avatar_url} alt="avatar_img" className="w-[40px] h-[40px] border rounded-full"/>
                ) : (
-                 <User color="#3F2305" />
+                 <User color="#3F2305" size={40}/>
               )}
             </div>
           </DropdownMenuTrigger>
@@ -173,11 +173,13 @@ const MainNavbar = () => {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem onSelect={() => {
-                  animatePageOut({
-                     href: "/profile",
-                     router,
-                     animate: "stagger"
-                  })
+                  if (!pathname.startsWith("/profile")) {
+                     animatePageOut({
+                        href: "/profile",
+                        router,
+                        animate: "stagger"
+                     })
+                  }
               }}>
                 Profil
               </DropdownMenuItem>

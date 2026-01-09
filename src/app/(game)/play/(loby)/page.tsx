@@ -1,6 +1,5 @@
-import React from 'react'
 
-export default function page() {
+export default function LobyPage() {
   return (
     <section className='text-primary w-full lg:w-[calc(100vw-384px)] h-full flex flex-col justify-center items-center'>
       <h1 className='font-bold text-7xl sm:text-8xl lg:text-9xl uppercase mask-b-from-10'>Lathi</h1>

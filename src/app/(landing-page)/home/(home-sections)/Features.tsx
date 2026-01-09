@@ -149,7 +149,7 @@ const Features = () => {
                   <CarouselItem key={index}>
                     <Card className={`${current === index + 1 ? "opacity-100" : "opacity-50"} transition-all duration-300 ease-in-out cursor-grab active:cursor-grabbing`}>
                       <CardContent className={`flex ${current === index + 1 ? "aspect-4/2" : "aspect-3/1"} transition-all duration-500 ease-in items-center justify-center relative`}>
-                        <Image src={feature.image_url} fill className="object-cover object-center" alt="feature_img"/>
+                        <Image src={feature.image_url} fill className="object-cover object-center" alt="feature_img" loading="eager"/>
                       </CardContent>
                     </Card>
                   </CarouselItem>

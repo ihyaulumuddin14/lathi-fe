@@ -183,7 +183,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
    return (
       <div className='w-full h-screen bg-secondary relative'>
          {/* background */}
-         <Image src={(slide && slide?.background_image_url) ?? ""} alt="story_background_image" fill className="object-cover brightness-50 z-0" loading="eager"/>
+         <img src={(slide && slide?.background_image_url) ?? ""} alt="story_background_image" className="w-full h-screen object-cover brightness-50 z-0"/>
 
          {/* top navbar */}
          <div className="z-5 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -214,9 +214,9 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                       }}
                      transition={{ duration: 0.5, ease: "easeInOut" }}
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
-                        <Image
+                        <img
                            src={(slide && slide?.characters[0].image_url) ?? ""}
-                           fill alt="char_img" className="object-cover"
+                           alt="char_img" className="object-cover w-full"
                            />
                   </motion.div>
                )}
@@ -236,9 +236,9 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                       }}
                      transition={{ duration: 0.5, ease: "easeInOut" }}
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
-                        <Image
+                        <img
                            src={(slide && slide?.characters[1].image_url) ?? ""}
-                           fill alt="char_img_1" className="object-cover" unoptimized
+                           alt="char_img_1" className="w-full object-cover"
                            />
                   </motion.div>
                )}

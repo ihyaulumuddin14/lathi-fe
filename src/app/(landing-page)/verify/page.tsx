@@ -1,7 +1,13 @@
 import { verifyService } from "@/services/auth.service"
 import { AxiosError } from "axios"
+import { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
+
+export const metadata: Metadata = {
+   title: "Verifikasi",
+   description: "Proses verifikasi akun pengguna untuk mengaktifasi akun sehingga dapat menggunakan fitur dari platform dengan baik"
+}
 
 const Verify = async ({
    searchParams
