@@ -113,7 +113,7 @@ export default function GameStats() {
 
                {/* body */}
                <div className="w-full grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-4">
-                  <Image src={(chapter && chapter.cover_image_url) ?? ""} alt="chapter_image" width={100} height={100}  className="rounded-lg w-full max-w-[150px] aspect-3/4 object-cover border justify-self-center" loading="lazy"/>
+                  <img src={(chapter && chapter.cover_image_url) ?? ""} alt="chapter_image" className="rounded-lg w-full max-w-[150px] aspect-3/4 object-cover border justify-self-center" loading="lazy"/>
                   <div className="w-full flex flex-col gap-1">
                      <h2 className="font-extrabold sm:text-left text-xl text-center sm:text-2xl uppercase sm:mb-2">{chapter?.title}</h2>
                      <p className="leading-5 mb-2">{chapter?.description}</p>

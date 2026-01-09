@@ -30,7 +30,7 @@ const BausastraSaku = () => {
             <div className='bg-[url(/bg_hero.webp)] bg-fixed w-full h-64 opacity-20 mask-b-from-97% z-0'/>
 
             {/* wrapper */}
-            <div className='w-full max-w-6xl h-full mx-auto relative py-[clamp(10px,3vw,30px)] px-[5vw] -translate-y-[20vh] rounded-md sm:rounded-xl bg-white'>
+            <div className='w-full max-w-6xl h-full mx-auto relative py-[clamp(10px,3vw,30px)] px-[5vw] -translate-y-[18vh] rounded-md sm:rounded-xl bg-white'>
                <header className='w-full grid grid-cols-1 md:gap-10 gap-5 mb-5'>
                   <div className='w-full h-full md:w-1/2 text-center md:text-left flex flex-col justify-center gap-4'>
                      <h1 className='text-4xl font-bold'>Bausastra Saku</h1>
@@ -102,8 +102,11 @@ const BausastraSaku = () => {
                      )}
                   </div>
                </main>
-
             </div>
+            
+            <footer className="w-full mt-20 py-5">
+               <p className="text-primary tracking-widest text-center">Copyright &copy; 2025 Lathi.</p>
+            </footer>
          </section>
       </ProtectedRoute>
    )

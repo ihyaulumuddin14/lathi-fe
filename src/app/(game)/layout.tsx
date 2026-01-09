@@ -6,6 +6,7 @@ import { useGameInfo } from '@/stores/useGameInfo';
 import { useEffect } from 'react';
 import { useShallow } from "zustand/shallow";
 
+
 export default function GameLayout({ children }: { children: React.ReactNode }) {
    const { selectedChapterId, isEndingChapter, setSelectedChapterId } = useGameInfo(
       useShallow(state => ({
