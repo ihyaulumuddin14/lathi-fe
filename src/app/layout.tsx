@@ -7,8 +7,6 @@ import { Geist, Geist_Mono, Inter, Love_Light } from "next/font/google";
 import "./globals.css";
 // import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "@/components/ui/sonner"
-import { SWRConfig } from "swr";
-import { chaptersDummy, SessionDataDummy, slidesDummy, userDummy } from "@/utils/constant";
 import AlertDialogIntercept from "@/components/AlertDialogIntercept";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
@@ -45,31 +43,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    // <ViewTransitions>
-      // <SWRConfig
-      //   value={{
-      //     fallback: {
-      //       "/api/v1/me": userDummy,
-      //       "api/v1/stories/chapters": chaptersDummy,
-      //       "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/content": slidesDummy,
-      //       "/stories/chapters/018e3a2d-9b1e-7b1e-8b1e-1b1e1b1e1b1e/session": SessionDataDummy
-      //     },
-      //     revalidateOnMount: true,
-      //     revalidateOnFocus: false
-      //   }}
-      //   >
-        <html lang="en">
-          <body
-            className={`font-ibm-plex-serif antialiased`}
-          >
-            <Toaster position="top-center"/>
-            <Suspense fallback={<Loader/>}>
-               <AlertDialogIntercept />
-            </Suspense>
-            {children}
-          </body>
-        </html>
-      // </SWRConfig>
-    // </ViewTransitions>
+      <html lang="en">
+         <body
+         className={`font-ibm-plex-serif antialiased`}
+         >
+         <Toaster position="top-center"/>
+         <Suspense fallback={<Loader/>}>
+            <AlertDialogIntercept />
+         </Suspense>
+         {children}
+         </body>
+      </html>
   );
 }

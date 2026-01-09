@@ -62,3 +62,11 @@ export type Pagination = {
    total_items: number,
    items_per_page: number
 }
+
+export type LeaderboardItem = {
+   rank: number,
+   user_id: string,
+   username: string,
+   title: string,
+   score: number
+}

@@ -31,7 +31,7 @@ export default function ChaptersPage() {
                      }
                   >
                   <div className={`w-9/10 aspect-3/4 border-3 rounded-md border-secondary relative ${chapter.is_locked ? "saturate-0 opacity-20" : ""}`}>
-                     <Image src={"/bg_hero.webp"} fill alt="chapter_image" className="object-cover object-center"/>
+                     <Image src={chapter.cover_image_url} fill alt="chapter_image" className="object-cover object-center"/>
                   </div>
 
                   <LockKeyhole className={`${chapter.is_locked ? "block" : "hidden"} absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2`} size={"3em"} color="#b0b0b0"/>

@@ -29,7 +29,6 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
    }, [isEndingChapter])
 
    useEffect(() => {
-      console.log("Chapters: ", chapters)
       if (!chapters) return
 
       const id = JSON.parse(localStorage.getItem("selectedChapterId") || "null")

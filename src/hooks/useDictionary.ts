@@ -4,23 +4,32 @@ import useSWR from "swr";
 
 export const useDictionary = ({
    search,
-   page = 1,
+   page,
    limit = 10
 }: {
    search?: string,
    page?: number,
    limit?: number
 }) => {
-   const { data, error, isLoading } = useSWR(
-      `/dictionaries?search=${search}&page=${page}&limit=${limit}`,
+   const params = new URLSearchParams()
+
+   if (search) params.append("search", search)
+   if (page) params.append("page", page.toString())
+   if (limit) params.append("limit", limit.toString())
+ 
+   const { data, error, isLoading, mutate: mutateDictionary } = useSWR(
+      `/dictionaries?${params.toString()}`,
       fetcher,
-      {}
+      {
+         shouldRetryOnError: true
+      }
    )
 
    return {
       items: data?.data.items as DictionaryItem[],
       pagination: data?.data.pagination as Pagination,
       error,
-      isLoading
+      isLoading,
+      mutateDictionary
    }
 }

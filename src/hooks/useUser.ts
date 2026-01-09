@@ -3,12 +3,12 @@ import useSWR from "swr";
 import { User } from "@/schema/AuthSchema"
 
 export const useUser = () => {
-  const { data, error, isLoading, mutate: mutateUser } = useSWR(
+  const { data, error, isLoading, isValidating, mutate: mutateUser } = useSWR(
     "/users/profile",
     fetcher,
     {
       revalidateOnFocus: false,
-      shouldRetryOnError: false
+      shouldRetryOnError: true
     }
   )
 
@@ -16,6 +16,7 @@ export const useUser = () => {
     user: data?.data as User,
     error,
     isLoading,
+    isValidating,
     mutateUser
   }
 }

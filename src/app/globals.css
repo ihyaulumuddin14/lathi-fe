@@ -90,9 +90,9 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: #7e5f0e;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-1: #e3b22e;
+  --chart-2: #aeadcd;
+  --chart-3: #b25651;
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
@@ -315,23 +315,27 @@
    border-left-color: transparent;
    border-radius: 50%;
    animation: spin89345 1s linear infinite;
- }
+}
 
- @keyframes spin89345 {
+@keyframes spin89345 {
    0% {
-     transform: rotate(0deg);
+      transform: rotate(0deg);
    }
 
    100% {
-     transform: rotate(360deg);
+      transform: rotate(360deg);
    }
- }
+}
 
- .no-scrollbar::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar {
    display: none;
- }
+}
  
- .no-scrollbar {
+.no-scrollbar {
    -ms-overflow-style: none;  /* IE & Edge */
    scrollbar-width: none;     /* Firefox */
- }
+}
+
+.transparent-scrollbar::-webkit-scrollbar-track {
+   background: transparent
+}

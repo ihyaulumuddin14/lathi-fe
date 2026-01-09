@@ -1,13 +1,14 @@
-"use client"
-
 import { verifyService } from "@/services/auth.service"
 import { AxiosError } from "axios"
-import { redirect, useSearchParams } from "next/navigation"
+import { redirect } from "next/navigation"
 import { toast } from "sonner"
 
-const Verify = () => {
-   const searchParams = useSearchParams()
-   const token = searchParams.get("token")
+const Verify = async ({
+   searchParams
+}: {
+   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) => {
+   const tokenResult = (await searchParams).token
 
    const redirectToLogin = async (token: string) => {
       try {
@@ -27,7 +28,7 @@ const Verify = () => {
       }
    }
 
-   if (token) redirectToLogin(token)
+   if (tokenResult) redirectToLogin(tokenResult as string)
 
 }
 

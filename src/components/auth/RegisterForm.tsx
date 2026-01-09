@@ -26,7 +26,7 @@ const RegisterForm = () => {
     try {
       const response = await registerService(registerPayload);
 
-      if (response) {
+      if (response.success) {
          setAlertDialogType("email-sent");
          toast.success(response.message);
       } else {

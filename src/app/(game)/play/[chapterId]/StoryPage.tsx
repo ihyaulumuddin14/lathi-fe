@@ -24,7 +24,7 @@ export type charReaction = "normal" | "angry" | "happy"
 
 export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean, mode: "new" | "continue" }) {
    const { slides } = useSlides(shouldFetch)
-   const { sessionData, error, mutateSession } = useSession()
+   const { sessionData, mutateSession } = useSession()
    const { selectedChapterId } = useGameInfo()
    const [ isSendingChoice, setIsSendingChoice ] = useState<boolean>(false)
    const { animationDone } = useTypingAnimation()
@@ -47,9 +47,6 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
       slides && sessionData && slides.find(slide => slide.id === sessionData.current_slide_id)
    ))
    
-   // useEffect(() => {
-   //    console.log(slide)
-   // }, [slide])
    
    useEffect(() => {
       if (slides && sessionData) {
@@ -183,11 +180,10 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
       )
    }
 
-
    return (
       <div className='w-full h-screen bg-secondary relative'>
          {/* background */}
-         <Image src={"/game_bg_dummy.webp"} alt="story_background_image" fill className="object-cover brightness-50 z-0"/>
+         <Image src={(slide && slide?.background_image_url) ?? ""} alt="story_background_image" fill className="object-cover brightness-50 z-0" loading="eager"/>
 
          {/* top navbar */}
          <div className="z-5 w-full h-[100px] px-[4vw] absolute top-5 left-1/2 -translate-x-1/2 flex justify-between items-center">
@@ -219,8 +215,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      transition={{ duration: 0.5, ease: "easeInOut" }}
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
                         <Image
-                           src={"/game_char_dummy.webp"}
-                           // src={slide?.characters[0].image_url}
+                           src={(slide && slide?.characters[0].image_url) ?? ""}
                            fill alt="char_img" className="object-cover"
                            />
                   </motion.div>
@@ -242,9 +237,8 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      transition={{ duration: 0.5, ease: "easeInOut" }}
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
                         <Image
-                           src={"/game_char_dummy.webp"}
-                           // src={slide.characters[1].image_url}
-                           fill alt="char_img" className="object-cover"
+                           src={(slide && slide?.characters[1].image_url) ?? ""}
+                           fill alt="char_img_1" className="object-cover" unoptimized
                            />
                   </motion.div>
                )}

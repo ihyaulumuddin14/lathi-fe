@@ -70,15 +70,7 @@ privateApi.interceptors.response.use(
             withCredentials: true,
           }
         );
-        const newAccessToken = res.data.newAccessToken;
-
-        // const user = {
-        //   id: res.data.user.id,
-        //   email: res.data.user.email,
-        //   role: res.data.user.role,
-        //   displayName: res.data.user.displayName,
-        // };
-        // useAuth.getState().setUser(user);
+        const newAccessToken = res.data.access_token;
         useAuthStore.getState().setAccessToken(newAccessToken);
 
         privateApi.defaults.headers.common[

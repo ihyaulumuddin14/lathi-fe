@@ -14,6 +14,7 @@ import {
   // CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -25,20 +26,24 @@ const features = [
   {
     title: "Lakon",
     description: "Bukan sekadar baca cerita. Tapi penentuan nasib ada di tanganmu sendiri lewat pilihan katamu. Salah ucap? Wassalam",
-    url: "/play"
+    url: "/play",
+    image_url: "/features/lakon_capture.webp"
   },
   {
     title: "Bausastra Saku",
     description: "Koleksi kosa kata \"Sakti\" yang kamu temukan sepanjang cerita. Lengkapi koleksimu dari level Common sampai Legendary",
-    url: "/collection"
+    url: "/collection",
+    image_url: "/features/bausastra_saku_capture.webp"
   }, {
     title: "Leaderboard",
     description: "Buktikan siapa yang paling njawani. Saingkan score sopan-santunmu dengan teman se-Jawa mu",
-    url: "/leaderboard"
+    url: "/leaderboard",
+    image_url: "/features/leaderboard_capture.webp"
   }, {
     title: "Profil",
     description: "Pantau progresmu. Apakah kamu masih 'Cah Polos' atau sudah layak dipanggil 'Priyayi'?",
-    url: "/profile"
+    url: "/profile",
+    image_url: "/features/profile_capture.webp"
   }
 ]
 
@@ -143,8 +148,8 @@ const Features = () => {
                 {features.map((feature, index) => (
                   <CarouselItem key={index}>
                     <Card className={`${current === index + 1 ? "opacity-100" : "opacity-50"} transition-all duration-300 ease-in-out cursor-grab active:cursor-grabbing`}>
-                      <CardContent className={`flex ${current === index + 1 ? "aspect-4/2" : "aspect-3/1"} transition-all duration-500 ease-in items-center justify-center p-6`}>
-                        <span className="text-sm sm:text-4xl font-semibold">{feature.title}</span>
+                      <CardContent className={`flex ${current === index + 1 ? "aspect-4/2" : "aspect-3/1"} transition-all duration-500 ease-in items-center justify-center relative`}>
+                        <Image src={feature.image_url} fill className="object-cover object-center" alt="feature_img"/>
                       </CardContent>
                     </Card>
                   </CarouselItem>

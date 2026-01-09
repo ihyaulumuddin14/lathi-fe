@@ -1,15 +1,14 @@
 'use client'
 
 import { useSession } from '@/hooks/useSession'
+import { useGameInfo } from '@/stores/useGameInfo'
+import { animatePageOut } from '@/utils/animation'
+import { MessageSquareWarning } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
-import { Button } from '../ui/button'
-import { animatePageOut } from '@/utils/animation'
 import Loader from '../Loader'
-import { useGameInfo } from '@/stores/useGameInfo'
-import { toast } from 'sonner'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
-import { MessageSquareWarning } from 'lucide-react'
+import { Button } from '../ui/button'
 
 const lobyMenuLists = [
   {

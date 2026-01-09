@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { animatePageOut } from "@/utils/animation";
 import { useShallow } from "zustand/shallow";
 import { useUser } from "@/hooks/useUser";
+import Skeleton from "./Skeleton";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -36,7 +37,7 @@ export default function Navbar() {
   return (
     <nav
       id="navbar"
-      className={`w-full h-fit transition-all duration-300 ease-in-out fixed top-0 left-0 z-48
+      className={`w-full h-fit transition-all duration-300 ease-in-out fixed top-0 left-0 z-48 backdrop-blur-md
       ${ isOpenMenu ? "bg-background" : "bg-transparent"}
       ${ pathname.startsWith("/play") ? "border-b border-muted" : ""}
       `}
@@ -45,23 +46,6 @@ export default function Navbar() {
     </nav>
   );
 }
-
-// const PlayNavbar = () => {
-//   const router = useRouter();
-
-//   const handleBack = () => {
-//     router.back()
-//   }
-
-//   return (
-//     <ul className="w-full flex items-center gap-3 py-3 px-7 sm:px-10">
-//       <div onClick={handleBack} className="p-2 border border-muted rounded-md hover:bg-muted cursor-pointer">
-//         <ChevronLeft />
-//       </div>
-//       <p className="text-lg font-bold">Kembali</p>
-//     </ul>
-//   );
-// };
 
 const MainNavbar = () => {
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -163,11 +147,9 @@ const MainNavbar = () => {
 
           {accessToken && (
             <ul className="flex gap-10">
-              <TransitionLink href={"/collection"}>Koleksi Kata</TransitionLink>
-              <TransitionLink href={"/leaderboard"}>
-                Papan Peringkat
-              </TransitionLink>
-              <TransitionLink href={"/profile"}>Profil</TransitionLink>
+              <TransitionLink href={"/collection"} className={`${pathname.startsWith("/collection") && "underline-offset-8 underline"}`}>Koleksi Kata</TransitionLink>
+              <TransitionLink href={"/leaderboard"} className={`${pathname.startsWith("/leaderboard") && "underline-offset-8 underline"}`}>Papan Peringkat</TransitionLink>
+              <TransitionLink href={"/profile"} className={`${pathname.startsWith("/profile") && "underline-offset-8 underline"}`}>Profil</TransitionLink>
             </ul>
           )}
         </>
@@ -176,14 +158,17 @@ const MainNavbar = () => {
       {accessToken ? (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
-            <div className="w-fit rounded-full bg-background hover:scale-105 duration-75 transition-all ease-in-out active:scale-100 p-2 hover:bg-muted cursor-pointer">
-              <User color="#3F2305" />
-              {/* <Image src={user?.avatar_url} alt="avatar_img"/> */}
+            <div className="w-fit rounded-full bg-background hover:scale-105 duration-75 transition-all ease-in-out active:scale-100 p-1 hover:bg-muted cursor-pointer relative">
+              {user?.avatar_url ? (
+                 <Image src={user.avatar_url} alt="avatar_img" width={40} height={40} className="border rounded-full"/>
+               ) : (
+                 <User color="#3F2305" />
+              )}
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="-translate-x-1/2 w-fit">
-            <DropdownMenuLabel className="text-center text-muted-foreground">
-              {user?.username}
+            <DropdownMenuLabel className="text-center text-muted-foreground flex justify-center">
+               { !user ? <Skeleton className="w-20 h-6"/> : <span>{user?.username}</span> }
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

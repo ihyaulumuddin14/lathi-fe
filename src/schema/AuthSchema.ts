@@ -19,19 +19,30 @@ export const RegisterSchema = z.object({
     )
 })
 
-export type RegisterCredentials = z.infer<typeof RegisterSchema>
-
-
-export const LoginSchema = z.object({
-  email: z
-    .email("Email tidak valid")
-    .nonempty("Email harus diisi"),
-  password: z
-    .string()
-    .nonempty("Password harus diisi")
+export const EditProfileSchema = z.object({
+   username: z
+   .string()
+   .min(3, "Nama minimal 3 karakter")
+   .max(100, "Nama maksimal 100 karakter")
+   .nonempty("Nama harus diisi"),
 })
 
+export const LoginSchema = z.object({
+   email: z
+   .email("Email tidak valid")
+   .nonempty("Email harus diisi"),
+   password: z
+    .string()
+    .nonempty("Password harus diisi")
+   })
+   
+
+   
+export type EditProfileCredentials = z.infer<typeof EditProfileSchema>
+export type RegisterCredentials = z.infer<typeof RegisterSchema>
 export type LoginCredentials = z.infer<typeof LoginSchema>
+
+
 
 export type User = {
    id: string,

@@ -1,9 +1,11 @@
-import React from 'react'
+import { Suspense } from "react";
+import BausastraSaku from "./BausastraSaku";
+import { Loader } from "lucide-react";
 
-const BausastraSaku = () => {
+export default function Page() {
   return (
-    <div className='min-h-screen'>Bausastra Saku</div>
-  )
+    <Suspense fallback={<section className="w-full min-h-screen flex justify-center items-center"><Loader /></section>}>
+      <BausastraSaku />
+    </Suspense>
+  );
 }
-
-export default BausastraSaku
