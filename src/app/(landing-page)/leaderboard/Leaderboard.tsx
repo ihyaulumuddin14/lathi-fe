@@ -151,7 +151,7 @@ const RankBar = ({
 
             <div className="w-[50px] aspect-square relative flex justify-center items-center">
                {item ? (
-                  <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
+                  <img src={item.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                ) : (
                   <User color="#3F2305" size={50}/>
                )}
