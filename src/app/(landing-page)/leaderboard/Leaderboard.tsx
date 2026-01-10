@@ -74,7 +74,7 @@ const Leaderboard = () => {
                               {user && user.leaderboard_info.rank}
                            </div>
                            <div className="flex items-center gap-3">
-                              <div className="w-fit aspect-square border rounded-full overflow-hidden">
+                              <div className="w-[50px] relative aspect-square border rounded-full overflow-hidden">
                                  <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                               </div>
                               <div className="">
