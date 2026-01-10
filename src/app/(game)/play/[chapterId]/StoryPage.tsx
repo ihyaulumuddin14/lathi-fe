@@ -134,7 +134,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
          }
       } catch (error) {
          if (error instanceof AxiosError) {
-            toast.error(error.response?.data?.error.message || "Terjadi kesalahan pada sistem")
+            toast.error(error.response?.data?.error.detail || "Terjadi kesalahan pada sistem")
          } else {
             toast.error("Terjadi kesalahan pada sistem")
          }

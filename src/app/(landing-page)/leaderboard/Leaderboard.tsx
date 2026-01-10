@@ -43,8 +43,8 @@ const Leaderboard = () => {
                         {index + 1}
                      </div>
                      <div className="flex items-center gap-3">
-                        <div className="w-fit aspect-square border rounded-full overflow-hidden">
-                           <User color="#3F2305" size={30}/>
+                        <div className="w-[30px] h-[30px] aspect-square border rounded-full overflow-hidden">
+                           <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                         </div>
                         <div className="">
                            <h2 className="font-bold text-xl">{user.username}</h2>

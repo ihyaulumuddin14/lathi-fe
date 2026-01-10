@@ -45,7 +45,7 @@ const LoginForm = () => {
          }
       } catch (error) {
          if (error instanceof AxiosError) {
-            toast.error(error.response?.data?.error.message || "Terjadi kesalahan sistem");
+            toast.error(error.response?.data?.error.detail || "Terjadi kesalahan sistem");
          } else {
             toast.error("Terjadi kesalahan sistem");
          }
