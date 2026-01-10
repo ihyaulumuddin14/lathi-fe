@@ -171,7 +171,7 @@ export function PaginationWithLinks({
     <div className="flex flex-col md:flex-row items-center gap-3 w-full">
       {/* LIMIT SELECT */}
       <div className="flex items-center gap-3 flex-1">
-        <span className="text-sm whitespace-nowrap">Rows per page</span>
+        <span className="text-sm whitespace-nowrap">Kata per halaman</span>
         <Select value={String(limit)} onValueChange={(v) => changeLimit(+v)}>
           <SelectTrigger className="w-20">
             <SelectValue />
