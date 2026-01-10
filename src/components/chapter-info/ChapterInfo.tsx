@@ -11,7 +11,6 @@ import { useSession } from "@/hooks/useSession";
 import { Chapter } from "@/schema/GameSchema";
 import { useGameInfo } from "@/stores/useGameInfo";
 import { X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { toast } from "sonner";
 import Loader from "../Loader";
@@ -62,37 +61,37 @@ const ChapterInfo = () => {
       <>
          <div
             onClick={() => {
-               if (selectedChapterId) setIsOpen(true)
+               if (selectedChapterId && chapter) setIsOpen(true)
                else toast.error("Silakan pilih Chapter untuk dimainkan")
             }}
             className="w-full max-w-50 text-secondary-foreground relative aspect-square rounded-full shadow-2xl hover:scale-102 active:scale-97 transition-all duration-200 cubic-bezier(0.65,-0.67,0.27,0.99) cursor-pointer -rotate-5 shadow-accent-foreground bg-secondary"
          >
-            {selectedChapterId ? (
-            <>
-               <p className="relative z-1 text-sm sm:text-lg text-primary bg-secondary font-bold px-4 py-1 rounded-md w-fit rotate-5 shadow-2xl shadow-accent-foreground">Saat ini</p>
-               <h2 className="absolute z-2 text-md sm:text-xl italic uppercase text-secondary font-bold  bg-primary px-4 py-1 rounded-md shadow-lg shadow-accent-foreground w-fit">
-                  Bagian {chapters.find(chapter => chapter.id === selectedChapterId)?.order_index}
-               </h2>
-               {chapter && (
-                  <img src={(chapter && chapter.cover_image_url) ?? ""} alt="chapter_image" className="rounded-full z-0 object-cover w-full"/>
-               )}
-               {sessionData && (
-                  <p
-                     className={`
-                     z-1 text-secondary text-md absolute bottom-0 left-1/2 -translate-x-1/2 px-3 rounded-md whitespace-nowrap rotate-5
-                     ${status === "PLAYING" && " bg-muted-foreground border-2 border-muted"}
-                     ${status === "GAMEOVER" && " bg-destructive text-uppercase text-xl border-2 border-secondary"}
-                     ${status === "COMPLETED" && " bg-ring text-uppercase text-xl px-5 border-2 border-secondary"}
-                     `}>
-                        {status === "PLAYING" && "Sedang dimainkan"}
-                        {status === "GAMEOVER" && "GAGAL"}
-                        {status === "COMPLETED" && "TAMAT"}
-                  </p>
-               )}
-            </>
-         ) : (
-            <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-2xl text-center font-semibold">Silakan pilih Bagian</p>
-         )}
+            {selectedChapterId && chapter ? (
+               <>
+                  <p className="relative z-1 text-sm sm:text-lg text-primary bg-secondary font-bold px-4 py-1 rounded-md w-fit rotate-5 shadow-2xl shadow-accent-foreground">Saat ini</p>
+                  <h2 className="absolute z-2 text-md sm:text-xl italic uppercase text-secondary font-bold  bg-primary px-4 py-1 rounded-md shadow-lg shadow-accent-foreground w-fit">
+                     Bagian {chapters.find(chapter => chapter.id === selectedChapterId)?.order_index}
+                  </h2>
+                  {chapter && (
+                     <img src={chapter.cover_image_url} alt="chapter_image" className="rounded-full aspect-square z-0 object-cover w-full"/>
+                  )}
+                  {sessionData && (
+                     <p
+                        className={`
+                           z-1 text-secondary text-md absolute bottom-0 left-1/2 -translate-x-1/2 px-3 rounded-md whitespace-nowrap rotate-5
+                           ${status === "PLAYING" && " bg-muted-foreground border-2 border-muted"}
+                           ${status === "GAMEOVER" && " bg-destructive text-uppercase text-xl border-2 border-secondary"}
+                           ${status === "COMPLETED" && " bg-ring text-uppercase text-xl px-5 border-2 border-secondary"}
+                        `}>
+                           {status === "PLAYING" && "Sedang dimainkan"}
+                           {status === "GAMEOVER" && "GAGAL"}
+                           {status === "COMPLETED" && "TAMAT"}
+                     </p>
+                  )}
+               </>
+            ) : (
+               <p className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-2xl text-center font-semibold">Silakan pilih Bagian</p>
+            )}
          </div>
 
          <AlertDialog open={isOpen} onOpenChange={setIsOpen}>

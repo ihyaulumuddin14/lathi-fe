@@ -9,7 +9,8 @@ export const useSlides = (shouldFetch: boolean) => {
       selectedChapterId && shouldFetch ? `/stories/chapters/${selectedChapterId}/content` : null,
       fetcher,
       {
-         revalidateOnFocus: false
+         revalidateOnFocus: false,
+         shouldRetryOnError: true
       }
    )
 

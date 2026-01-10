@@ -67,6 +67,7 @@ export type LeaderboardItem = {
    rank: number,
    user_id: string,
    username: string,
+   avatar_url: string,
    title: string,
    score: number
 }

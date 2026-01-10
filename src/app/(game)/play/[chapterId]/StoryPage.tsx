@@ -10,7 +10,6 @@ import { useGameInfo } from "@/stores/useGameInfo"
 import { useTypingAnimation } from "@/stores/useTypingAnimation"
 import { AxiosError } from "axios"
 import { AnimatePresence, motion } from "motion/react"
-import Image from "next/image"
 import { useCallback, useEffect, useReducer, useState } from "react"
 import { toast } from "sonner"
 import CharDialog from "./CharDialog"
@@ -135,7 +134,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
          }
       } catch (error) {
          if (error instanceof AxiosError) {
-            toast.error(error.response?.data?.error.message || "Terjadi kesalahan pada sistem")
+            toast.error(error.response?.data?.error.detail || "Terjadi kesalahan pada sistem")
          } else {
             toast.error("Terjadi kesalahan pada sistem")
          }
@@ -215,7 +214,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
                         <img
                            src={(slide && slide?.characters[0].image_url) ?? ""}
-                           alt="char_img" className="object-cover w-full"
+                           alt="char_img_1" className="object-cover w-full"
                            />
                   </motion.div>
                )}
@@ -237,7 +236,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
                         <img
                            src={(slide && slide?.characters[1].image_url) ?? ""}
-                           alt="char_img_1" className="w-full object-cover"
+                           alt="char_img_2" className="w-full object-cover"
                            />
                   </motion.div>
                )}

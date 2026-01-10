@@ -58,15 +58,20 @@ const Features = () => {
     if (!api) {
       return
     }
-
     setCount(api.scrollSnapList().length)
     setCurrent(api.selectedScrollSnap() + 1)
-
+    
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap() + 1)
       setTitle(features[api.selectedScrollSnap()].title)
     })
   }, [api])
+
+  useEffect(() => {
+   if (!api) return
+
+   api.scrollTo(current - 1)
+  }, [api, current])
 
   useGSAP(() => {
     gsap.registerPlugin(ScrollTrigger, SplitText)
@@ -95,7 +100,7 @@ const Features = () => {
       scrollTrigger: {
         trigger: "#features",
         start: "center top",
-        end: "bottom -=100%",
+        end: "bottom -=200%",
         scrub: true,
         pin: true,
         anticipatePin: 1,
@@ -104,13 +109,30 @@ const Features = () => {
     })
 
     gsap.set(fadeText.chars, { autoAlpha: 0, filter: "blur(100px)", color: "var(--background)" })
-    
+
     gsap.to(fadeText.chars, {
       scrollTrigger: {
         trigger: "#features",
         start: "center center",
         end: "bottom -=100%",
-        scrub: true
+        scrub: true,
+        onUpdate: self => {
+         const currentSlideTarget = Math.floor((self.progress * 4) + 1)
+         switch (currentSlideTarget) {
+            case 1:
+               setCurrent(currentSlideTarget)
+               break
+            case 2: 
+               setCurrent(currentSlideTarget)
+               break;
+            case 3:
+               setCurrent(currentSlideTarget)
+               break;
+            case 4:
+               setCurrent(currentSlideTarget)
+               break
+         }
+        }
       },
       autoAlpha: 1,
       filter: "blur(0px)",

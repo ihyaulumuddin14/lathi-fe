@@ -6,7 +6,10 @@ export const useLeaderboards = () => {
    const { data, error, isLoading } = useSWR(
       "/leaderboards",
       fetcher,
-      {}
+      {
+         revalidateOnReconnect: true,
+         shouldRetryOnError: true
+      }
    )
 
    return {

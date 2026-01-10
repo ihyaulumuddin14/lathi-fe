@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import ProtectedRoute from '../ProtectedRoute'
+import Skeleton from '@/components/Skeleton'
 
 const BausastraSaku = () => {
    const searchParams = useSearchParams()
@@ -65,7 +66,7 @@ const BausastraSaku = () => {
                <main className='w-full py-5 border-t border-t-muted/20'>
                   {/* vocabs wrapper */}
                   <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5'>
-                     {items && items.map((item, index) => (
+                     {items ? (items.map((item, index) => (
                         <div key={index} className={`grid grid-cols-[25px_1fr] w-full rounded-r-lg overflow-hidden shadow-md bg-secondary ${item.is_locked ? "opacity-30 cursor-not-allowed" : "hover:scale-105 duration-200 ease-in-out transition-all"} relative`}>
                            <div className="w-full bg-primary h-full flex justify-center items-center">
                               <p className="-rotate-90 origin-center text-secondary">Krama</p>
@@ -88,7 +89,11 @@ const BausastraSaku = () => {
                               </table>
                            </div>
                         </div>
-                     ))}
+                     ))) : (
+                        [...Array(5).map((_, index) => (
+                           <Skeleton key={index} className='w-full h-[115px]'/>
+                        ))]
+                     )}
                   </div>
 
                   <div className='w-full my-5 flex justify-center'>

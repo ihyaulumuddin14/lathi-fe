@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { useUser } from "@/hooks/useUser"
 import { EditProfileCredentials, EditProfileSchema } from "@/schema/AuthSchema"
 import { deleteUserService, editUserService } from "@/services/user.service"
+import { useAuthStore } from "@/stores/useAuthStore"
 import { animatePageOut } from "@/utils/animation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AxiosError } from "axios"
@@ -16,10 +17,10 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import ProtectedRoute from "../ProtectedRoute"
 
 const Profile = () => {
    const router = useRouter()
+   const { setAccessToken } = useAuthStore()
    const { user, mutateUser } = useUser()
    const [isOpen, setIsOpen] = useState(false)
    const [isEditMode, setIsEditMode] = useState(false)
@@ -44,7 +45,7 @@ const Profile = () => {
          }
       } catch (error) {
          if (error instanceof AxiosError) {
-            toast.error(error?.response?.data?.error.message || "Terjadi kesalahan pada sistem")
+            toast.error(error?.response?.data?.error.detail || "Terjadi kesalahan pada sistem")
          } else {
             toast.error("Terjadi kesalahan pada sistem")
          }
@@ -53,17 +54,14 @@ const Profile = () => {
 
    const handleDeleteUser = async () => {
       try {
-         const response = await deleteUserService()
-
-         if (response.success) {
-            mutateUser(null, false)
-            router.replace("/")
-         } else {
-            throw Error()
-         }
+         await deleteUserService()
+         router.replace("/")
+         mutateUser(null, false)
+         setAccessToken(null)
       } catch (error) {
+         console.log(error)
          if (error instanceof AxiosError) {
-            toast.error(error?.response?.data?.error.message || "Terjadi kesalahan pada sistem")
+            toast.error(error?.response?.data?.error.detail || "Terjadi kesalahan pada sistem")
          } else {
             toast.error("Terjadi kesalahan pada sistem")
          }
@@ -82,7 +80,7 @@ const Profile = () => {
 
                   {/* profile */}
                   <article className="relative flex gap-5 border-b border-b-muted">
-                     <div className="aspect-square h-[200px] sm:h-[175px] lg:h-[200px] w-[200px] sm:w-[175px] lg:w-[200px] overflow-hidden rounded-4xl relative -top-18 shrink-0">
+                     <div className="aspect-square h-[150px] sm:h-[175px] lg:h-[200px] w-[150px] sm:w-[175px] lg:w-[200px] overflow-hidden rounded-4xl relative -top-18 shrink-0">
                         {!user ? (
                            <Skeleton className="aspect-square w-[200px] sm:w-[175px] lg:w-[200px] h-[200px] sm:h-[175px] lg:h-[200px] overflow-hidden rounded-4xl relative -top-18 shrink-0"/>
                         ) : (
@@ -116,7 +114,7 @@ const Profile = () => {
                               {!user ? <Skeleton /> : <span>{user?.username}</span>}
                            </h2>
                         )}
-                        <h3 className="text-xl lg:text-2xl font-light italic mb-3">
+                        <h3 className="text-lg sm:text-xl lg:text-2xl font-light italic mb-3 overflow-x-auto">
                            {!user ? <Skeleton/> : <span>{user?.email}</span>}
                         </h3>
                         {
@@ -127,7 +125,7 @@ const Profile = () => {
                                  }}
                                  variant={"outline"}
                                  className="text-md">
-                                    Edit Profil
+                                    Edit Username
                               </Button>
                            )
                         }
@@ -174,18 +172,24 @@ const Profile = () => {
                      <h2 className="text-lg font-bold mb-3">Lencana</h2>
 
                      <div className="flex gap-1">
-                        {user ? user?.badges.map((badge, index) => (
-                           <Tooltip key={index}>
-                              <TooltipTrigger asChild>
-                                 <div className="w-[50px] aspect-square relative">
-                                    <img src={badge?.icon_url} className="w-full" alt="badge_img"/>
-                                 </div>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                    {badge.name}
-                              </TooltipContent>
-                           </Tooltip>
-                        )) : ([...Array(3)].map((_, index) => (
+                        {user ? (
+                           user.badges ? (
+                              user?.badges.map((badge, index) => (
+                                 <Tooltip key={index}>
+                                    <TooltipTrigger asChild>
+                                       <div className="w-[50px] aspect-square relative">
+                                          <img src={badge?.icon_url} className="w-full" alt="badge_img"/>
+                                       </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                          {badge.name}
+                                    </TooltipContent>
+                                 </Tooltip>
+                              ))
+                           )  : (
+                              <p>Belum ada lencana</p>
+                           )
+                        ) : ([...Array(3)].map((_, index) => (
                            <Skeleton key={index} className="w-12 h-12 rounded-full"/>
                         )))}
                      </div>
@@ -203,29 +207,60 @@ const Profile = () => {
                         }} className="w-full border border-muted rounded-md p-5 cursor-pointer hover:bg-muted/10">
                            <h2 className="text-lg font-bold mb-3">Klasemen</h2>
 
-                           <div className="w-full grid grid-cols-2">
-                              {/* rank */}
-                              <div className="w-full flex justify-center items-center gap-4">
-                                 <Trophy size={50}/>
-                                 <div className="flex flex-col justify-center items-start">
-                                    <span className="text-3xl font-extrabold">
-                                       {!user ? <Skeleton className="h-12 aspect-square"/> : <span>{user?.leaderboard_info?.rank}</span>}
-                                    </span>
-                                    <p>Peringkat</p>
-                                 </div>
-                              </div>
+                           {user ? (
+                              user.leaderboard_info ? (
+                                 <div className="w-full grid grid-cols-2">
+                                    {/* rank */}
+                                    <div className="w-full flex justify-center items-center gap-4">
+                                       <Trophy size={50}/>
+                                       <div className="flex flex-col justify-center items-start">
+                                          <span className="text-3xl font-extrabold">
+                                             {!user ? <Skeleton className="h-12 aspect-square"/> : <span>{user?.leaderboard_info?.rank}</span>}
+                                          </span>
+                                          <p>Peringkat</p>
+                                       </div>
+                                    </div>
 
-                              {/* score */}
-                              <div className="w-full flex justify-center items-center gap-4">
-                                 <CircleStar size={50}/>
-                                 <div className="flex flex-col justify-center items-start">
-                                    <span className="text-3xl font-extrabold">
-                                       {!user ? <Skeleton className="h-12 w-15"/> : <span>{user?.leaderboard_info?.score}</span>}
-                                    </span>
-                                    <p>Skor</p>
+                                    {/* score */}
+                                    <div className="w-full flex justify-center items-center gap-4">
+                                       <CircleStar size={50}/>
+                                       <div className="flex flex-col justify-center items-start">
+                                          <span className="text-3xl font-extrabold">
+                                             {!user ? <Skeleton className="h-12 w-15"/> : <span>{user?.leaderboard_info?.score}</span>}
+                                          </span>
+                                          <p>Skor</p>
+                                       </div>
+                                    </div>
                                  </div>
-                              </div>
-                           </div>
+                              ) : (
+                                 <>Kamu belum pernah bermain lakon</>
+                              )
+                           ) : (
+                                 <div className="w-full grid grid-cols-2">
+                                    {/* rank */}
+                                    <div className="w-full flex justify-center items-center gap-4">
+                                       <Trophy size={50}/>
+                                       <div className="flex flex-col justify-center items-start">
+                                          <span className="text-3xl font-extrabold">
+                                             <Skeleton className="h-12 aspect-square"/>
+                                          </span>
+                                          <p>Peringkat</p>
+                                       </div>
+                                    </div>
+
+                                    {/* score */}
+                                    <div className="w-full flex justify-center items-center gap-4">
+                                       <CircleStar size={50}/>
+                                       <div className="flex flex-col justify-center items-start">
+                                          <span className="text-3xl font-extrabold">
+                                             <Skeleton className="h-12 w-15"/>
+                                          </span>
+                                          <p>Skor</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                           )}
+
                         </article>
                      </TooltipTrigger>
                      <TooltipContent>

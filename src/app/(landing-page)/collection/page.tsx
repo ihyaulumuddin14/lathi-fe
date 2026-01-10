@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <Suspense fallback={<section className="w-full min-h-screen flex justify-center items-center"><Loader /></section>}>
+    <Suspense fallback={<section className="w-full min-h-screen flex justify-center items-center bg-secondary"><Loader /></section>}>
       <BausastraSaku />
     </Suspense>
   );

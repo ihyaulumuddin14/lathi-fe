@@ -1,5 +1,6 @@
 'use client'
 
+import Skeleton from "@/components/Skeleton"
 import { useLeaderboards } from "@/hooks/useLeaderboards"
 import { useUser } from "@/hooks/useUser"
 import { LeaderboardItem } from "@/schema/GameSchema"
@@ -42,8 +43,8 @@ const Leaderboard = () => {
                         {index + 1}
                      </div>
                      <div className="flex items-center gap-3">
-                        <div className="w-fit aspect-square border rounded-full overflow-hidden">
-                           <User color="#3F2305" size={30}/>
+                        <div className="w-[30px] h-[30px] aspect-square border rounded-full overflow-hidden">
+                           <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                         </div>
                         <div className="">
                            <h2 className="font-bold text-xl">{user.username}</h2>
@@ -61,31 +62,51 @@ const Leaderboard = () => {
                <hr className="border-b border-muted border-0 my-5"/>
 
                <h3 className="text-xl font-bold">Peringkat Kamu</h3>
-               {user && (
-                  <div className="w-full p-3 md:px-6 flex bg-muted/40 rounded-md md:rounded-2xl items-center gap-3 md:gap-7 border-5 border-primary shadow-lg shadow-primary/50">
-                     <div className={`
-                        ${user.leaderboard_info.rank === 1 && "bg-chart-1 text-secondary"}
-                        ${user.leaderboard_info.rank === 2 && "bg-chart-2 text-secondary"}
-                        ${user.leaderboard_info.rank === 3 && "bg-chart-3 text-secondary"}
-                        h-[25px] md:h-[50px] aspect-square rounded-full text-lg font-bold flex justify-center items-center`}>
-                        {user && user.leaderboard_info.rank}
-                     </div>
-                     <div className="flex items-center gap-3">
-                        <div className="w-fit aspect-square border rounded-full overflow-hidden">
-                           <User color="#3F2305" size={30}/>
+               <div className="w-full p-3 md:px-6 flex bg-muted/40 rounded-md md:rounded-2xl items-center gap-3 md:gap-7 border-5 border-primary shadow-lg shadow-primary/50">
+                  {user ? (
+                     user.leaderboard_info ? (
+                        <>
+                           <div className={`
+                              ${user.leaderboard_info.rank === 1 && "bg-chart-1 text-secondary"}
+                              ${user.leaderboard_info.rank === 2 && "bg-chart-2 text-secondary"}
+                              ${user.leaderboard_info.rank === 3 && "bg-chart-3 text-secondary"}
+                              h-[25px] md:h-[50px] aspect-square rounded-full text-lg font-bold flex justify-center items-center`}>
+                              {user && user.leaderboard_info.rank}
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <div className="w-fit aspect-square border rounded-full overflow-hidden">
+                                 <User color="#3F2305" size={30}/>
+                              </div>
+                              <div className="">
+                                 <h2 className="font-bold text-xl">{user.username}</h2>
+                                 <h3 className="italic leading-4">{user.current_title}</h3>
+                              </div>
+                           </div>
+         
+                           <div className="ml-auto flex gap-2 justify-center items-center bg-primary py-2 px-4 rounded-lg overflow-hidden shrink-0">
+                              <CircleStar size={20} color="#F2EAD3"/>
+                              <span className="text-secondary line-clamp-1">{user.leaderboard_info.score}</span>
+                           </div>
+                        </>
+                     ) : (
+                        <>Kamu belum pernah bermain lakon</>
+                     )
+                  ) : (
+                     <>
+                        <div className={`h-[25px] md:h-[50px] aspect-square rounded-full text-lg font-bold flex justify-center items-center bg-neutral-400 animate-pulse`}/>
+                        <div className="flex items-center gap-3">
+                           <div className="aspect-square border rounded-full overflow-hidden w-[30px] bg-neutral-400 animate-pulse">
+                           </div>
+                           <div className="flex flex-col gap-1">
+                              <Skeleton className="h-3 w-7"/>
+                              <Skeleton className="h-2 w-12"/>
+                           </div>
                         </div>
-                        <div className="">
-                           <h2 className="font-bold text-xl">{user.username}</h2>
-                           <h3 className="italic leading-4">{user.current_title}</h3>
-                        </div>
-                     </div>
-
-                     <div className="ml-auto flex gap-2 justify-center items-center bg-primary py-2 px-4 rounded-lg overflow-hidden shrink-0">
-                        <CircleStar size={20} color="#F2EAD3"/>
-                        <span className="text-secondary line-clamp-1">{user.leaderboard_info.score}</span>
-                     </div>
-                  </div>
-               )}
+      
+                        <Skeleton className="ml-auto h-10 w-24"/>
+                     </>
+                  )}
+               </div>
             </main>
          </div>
          
