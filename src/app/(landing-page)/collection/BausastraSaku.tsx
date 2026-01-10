@@ -66,34 +66,40 @@ const BausastraSaku = () => {
                <main className='w-full py-5 border-t border-t-muted/20'>
                   {/* vocabs wrapper */}
                   <div className='w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5'>
-                     {items ? (items.map((item, index) => (
-                        <div key={index} className={`grid grid-cols-[25px_1fr] w-full rounded-r-lg overflow-hidden shadow-md bg-secondary ${item.is_locked ? "opacity-30 cursor-not-allowed" : "hover:scale-105 duration-200 ease-in-out transition-all"} relative`}>
-                           <div className="w-full bg-primary h-full flex justify-center items-center">
-                              <p className="-rotate-90 origin-center text-secondary">Krama</p>
-                           </div>
-                           <div className="w-full p-3">
-                              <h3 className="text-2xl font-bold pb-2 px-4">{item.word_krama}</h3>
-                              <table className="w-full border rounded-md">
-                                 <thead className="border">
-                                    <tr className="w-full">
-                                       <th className="border">Indonesia</th>
-                                       <th className="border">Ngoko</th>
-                                    </tr>
-                                 </thead>
-                                 <tbody className="border text-center">
-                                    <tr className="w-full">
-                                       <td className="border">{item.word_indo}</td>
-                                       <td className="border">{item.word_ngoko}</td>
-                                    </tr>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     ))) : (
-                        [...Array(5).map((_, index) => (
-                           <Skeleton key={index} className='w-full h-[115px]'/>
-                        ))]
-                     )}
+                     {items ? 
+                        items.length > 0 ? (
+                           items.map((item, index) => (
+                              <div key={index} className={`grid grid-cols-[25px_1fr] w-full rounded-r-lg overflow-hidden shadow-md bg-secondary ${item.is_locked ? "opacity-30 cursor-not-allowed" : "hover:scale-105 duration-200 ease-in-out transition-all"} relative`}>
+                                 <div className="w-full bg-primary h-full flex justify-center items-center">
+                                    <p className="-rotate-90 origin-center text-secondary">Krama</p>
+                                 </div>
+                                 <div className="w-full p-3">
+                                    <h3 className="text-2xl font-bold pb-2 px-4">{item.word_krama}</h3>
+                                    <table className="w-full border rounded-md">
+                                       <thead className="border">
+                                          <tr className="w-full">
+                                             <th className="border">Indonesia</th>
+                                             <th className="border">Ngoko</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody className="border text-center">
+                                          <tr className="w-full">
+                                             <td className="border">{item.word_indo}</td>
+                                             <td className="border">{item.word_ngoko}</td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </div>
+                              </div>
+                           ))
+                        ) : (
+                           <p>Kata tidak ditemukan</p>
+                        ) : (
+                           [...Array(5).map((_, index) => (
+                              <Skeleton key={index} className='w-72 h-28'/>
+                           ))]
+                        )
+                     }
                   </div>
 
                   <div className='w-full my-5 flex justify-center'>

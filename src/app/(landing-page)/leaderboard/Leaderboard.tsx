@@ -75,7 +75,7 @@ const Leaderboard = () => {
                            </div>
                            <div className="flex items-center gap-3">
                               <div className="w-fit aspect-square border rounded-full overflow-hidden">
-                                 <User color="#3F2305" size={30}/>
+                                 <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                               </div>
                               <div className="">
                                  <h2 className="font-bold text-xl">{user.username}</h2>
@@ -151,9 +151,9 @@ const RankBar = ({
 
             <div className="w-[50px] aspect-square relative flex justify-center items-center">
                {item ? (
-                  <User color="#3F2305" size={50}/>
+                  <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                ) : (
-                  <span>-</span>
+                  <User color="#3F2305" size={50}/>
                )}
             </div>
 
