@@ -12,10 +12,9 @@ const MenuOverlay = () => {
   const { isOpenMenu, setIsOpenMenu } = useMenu();
   const menuRef = useRef<HTMLDivElement | null>(null)
   const pathname = usePathname()
-  const skipAnimationRef = useRef(true)
+  const isFirstMount = useRef(true)
 
   useLayoutEffect(() => {
-    skipAnimationRef.current = true
 
     gsap.set(menuRef.current, {
       clipPath: "circle(0% at 50% 50%)",
@@ -25,10 +24,8 @@ const MenuOverlay = () => {
   }, [pathname])
 
   useGSAP(() => {
-    if (!menuRef.current) return
-
-    if (skipAnimationRef.current) {
-      skipAnimationRef.current = false
+    if (isFirstMount.current) {
+      isFirstMount.current = false
       return
     }
 

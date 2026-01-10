@@ -7,14 +7,7 @@ import { LeaderboardItem } from "@/schema/GameSchema"
 import { CircleStar, User } from "lucide-react"
 import Image from "next/image"
 import { useMemo } from "react"
-const userDummy = {
-   rank: 1,
-   user_id: "2343",
-   username: "SuamiSekarUhuy",
-   avatar_url: "/ulum_photo.webp",
-   title: "priyayi",
-   score: 970
-}
+
 const Leaderboard = () => {
    const { topUsers } = useLeaderboards()
    const { user } = useUser()
@@ -53,17 +46,17 @@ const Leaderboard = () => {
                      </div>
                      <div className="min-w-0 flex-1 flex items-center gap-3">
                         <div className="w-[30px] h-[30px] shrink-0 aspect-square border rounded-full overflow-hidden">
-                           <img src={userDummy.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
+                           <img src={user.avatar_url} alt="user_img" className="w-full h-full object-center object-cover"/>
                         </div>
-                        <div className="min-w-0 flex-1 line-clamp-1">
-                           <h2 className="font-bold text-lg sm:text-xl">{userDummy.username}</h2>
-                           <h3 className="italic leading-4">{userDummy.title}</h3>
+                        <div className="min-w-0 flex-1 flex flex-col gap-1 line-clamp-1">
+                           <h2 className="font-bold text-lg sm:text-xl">{user.username}</h2>
+                           <h3 className="italic leading-4">{user.title}</h3>
                         </div>
                      </div>
 
                      <div className="ml-auto flex gap-2 justify-center items-center bg-primary py-2 px-4 rounded-lg overflow-hidden shrink-0 line-clamp-1">
                         <CircleStar size={20} color="#F2EAD3"/>
-                        <span className="text-secondary">{userDummy.score}</span>
+                        <span className="text-secondary">{user.score}</span>
                      </div>
                   </div>
                ))) : (
@@ -168,7 +161,7 @@ const RankBar = ({
                )}
             </div>
 
-            <h3 className="font-bold text-sm sm:text-md md:text-lg w-full line-clamp-1">{item ? item?.username : "-"}</h3>
+            <h3 className="font-bold text-center text-sm sm:text-md md:text-lg w-full">{item ? item?.username : "-"}</h3>
             <h4 className="text-sm sm:text-md italic">{item ? item?.title : "-"}</h4>
             <div className="flex gap-2 mt-2 justify-center items-center w-full bg-primary p-1 rounded-lg overflow-hidden shrink-0">
                <CircleStar size={20} color="#F2EAD3"/>
