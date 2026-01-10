@@ -5,6 +5,7 @@ import { useChapter } from "@/hooks/useChapter";
 import { useGameInfo } from '@/stores/useGameInfo';
 import { useEffect } from 'react';
 import { useShallow } from "zustand/shallow";
+import ProtectedRoute from "../(landing-page)/ProtectedRoute";
 
 
 export default function GameLayout({ children }: { children: React.ReactNode }) {
@@ -48,6 +49,8 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
    }, [selectedChapterId])
 
    return (
-      <>{children}</>
+      <ProtectedRoute>
+         {children}
+      </ProtectedRoute>
    )
 }
