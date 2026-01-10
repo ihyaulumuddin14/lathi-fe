@@ -2,11 +2,12 @@
 
 import { useAuthStore } from '@/stores/useAuthStore';
 import axios from 'axios';
-import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
    const { accessToken, setAccessToken } = useAuthStore()
+   const router = useRouter()
 
    useEffect(() => {
       const refresh = async () => {
@@ -23,7 +24,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
          if (response.data.success) {
             setAccessToken(newAccessToken);
          } else {
-            redirect("/home")
+            router.replace("/home")
          } 
       }
 
