@@ -189,12 +189,12 @@ const Features = () => {
                animate={{opacity: 1}}
                exit={{opacity: 0}}
                transition={{duration: 0.5, ease: "easeInOut"}}
-               className="text-primary-foreground text-lg h-25 sm:h-30" >
+               className="text-primary-foreground text-sm sm:text-md lg:text-lg h-25 sm:h-30" >
                   {features[current - 1]?.description}
             </motion.p>
             <TransitionLink href={features[current - 1]?.url} componentType="button-secondary">Buka Halaman</TransitionLink>
           </div>
-          <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10% overflow-visible">FITUR</h1>
+          <h1 ref={fadeTextRef} className="text-[clamp(7em,12vw,11em)] leading-tight text-primary-foreground w-full flex items-end justify-center sm:justify-end mask-b-from-10% overflow-visible whitespace-nowrap">FITUR</h1>
         </footer>
       </div>
     </section>

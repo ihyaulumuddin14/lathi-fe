@@ -16,8 +16,8 @@ type useGameInfoProps = {
 export const useGameInfo = create<useGameInfoProps>(set => ({
    selectedChapterId: null,
    isEndingChapter: false,
-   musicValue: 0.5,
-   sfxValue: 0.5,
+   musicValue: 0.3,
+   sfxValue: 0.3,
    setSelectedChapterId: (id: string) => {
       set({
          selectedChapterId: id

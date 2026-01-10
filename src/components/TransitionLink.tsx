@@ -10,7 +10,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept";
 import { useUser } from "@/hooks/useUser";
 
-const protectedRouteLists = ["/play"];
+const protectedRouteLists = ["/play", "/collection", "/leaderboard", "/profile"];
 
 interface TransitionLinkProps extends LinkProps {
   href: string;

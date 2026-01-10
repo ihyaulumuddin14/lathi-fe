@@ -2,15 +2,12 @@
 
 // import { useAlertDialogIntercept } from "@/stores/useAlertDialogIntercept"
 // import AlertDialogIntercept from "@/components/AlertDialogIntercept";
-import MenuOverlay from "@/components/MenuOverlay";
 import { refreshService } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { animatePageIn } from "@/utils/animation";
-import { AxiosError } from "axios";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { toast } from "sonner";
 import { useShallow } from "zustand/shallow";
 
 const notAnimatePageIn = ["/play/chapters", "/play/rules"];
@@ -89,8 +86,6 @@ const Template = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div>
-      <MenuOverlay />
-
       <div
         id="banner-1"
         className="min-h-screen bg-neutral-950 z-50 fixed top-0 left-0 w-1/4"

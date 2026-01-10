@@ -79,7 +79,7 @@ const Problem = () => {
   }, [])
 
   return (
-   <section id="problem" className="section-wrapper relative z-0 p-[3vw]">
+   <section id="problem" className="section-wrapper relative z-0 p-[6vw]">
       <header className="flex flex-col gap-6">
          <h1 className="uppercase text-left flex gap-2">
             <ChevronLast />
@@ -91,7 +91,7 @@ const Problem = () => {
       </header>
 
       <main className="w-full h-fit grid sm:grid-cols-2 gap-10 mt-10 items-center">
-        <p ref={heroParagraphRef} className="text-left text-lg w-full max-w-md">
+        <p ref={heroParagraphRef} className="text-left text-sm sm:text-md lg:text-lg w-full sm:max-w-md">
           <span className="pl-10 text-2xl sm:text-3xl font-bold">Kita tahu rasanya. </span><br /><br />
           Lancar dan fasih ngomong ngoko sama teman tongkrongan, 
           tapi langsung kicep, gagap, dan keringat dingin pas harus ngobrol sama orang yang lebih sepuh (tua).  <br /><br />

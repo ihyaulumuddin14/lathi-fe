@@ -77,7 +77,7 @@ const CTA = () => {
   }, []);
 
   return (
-    <section id="cta" className="section-wrapper relative z-1 p-[3vw]">
+    <section id="cta" className="section-wrapper relative z-1 p-[6vw]">
       <header className="flex flex-col gap-6">
         <h1 className="uppercase text-left flex gap-2">
           <ChevronLast />
@@ -93,7 +93,7 @@ const CTA = () => {
 
       <main className="w-full h-fit grid sm:grid-cols-2 gap-10 mt-10 items-center">
         <div className="w-full h-fit flex flex-col gap-4">
-          <p ref={CTAParagraphRef} className="text-left w-full max-w-md">
+          <p ref={CTAParagraphRef} className="text-left w-full text-sm sm:text-base sm:max-w-md">
             <span className="text-2xl sm:text-3xl font-bold text-left">
               Jangan mau selamanya jadi &quot;Cah Wingit&quot;{" "}
             </span>

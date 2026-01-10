@@ -31,17 +31,17 @@ const BausastraSaku = () => {
             <div className='bg-[url(/bg_hero.webp)] bg-fixed w-full h-64 opacity-20 mask-b-from-97% z-0'/>
 
             {/* wrapper */}
-            <div className='w-full max-w-6xl h-full mx-auto relative py-[clamp(10px,3vw,30px)] px-[5vw] -translate-y-[18vh] rounded-md sm:rounded-xl bg-white'>
+            <div className='w-full max-w-6xl h-full mx-auto relative py-[clamp(6vw,6vw,30px)] px-[6vw] -translate-y-[18vh] rounded-md sm:rounded-xl bg-white'>
                <header className='w-full grid grid-cols-1 md:gap-10 gap-5 mb-5'>
                   <div className='w-full h-full md:w-1/2 text-center md:text-left flex flex-col justify-center gap-4'>
                      <h1 className='text-4xl font-bold'>Bausastra Saku</h1>
-                     <h2 className='text-base text-muted-foreground leading-5'>Temukan arti kata sulit yang Anda temukan pada dialog karakter.</h2>
+                     <h2 className='text-sm sm:text-base text-muted-foreground leading-5'>Temukan arti kata sulit yang Anda temukan pada dialog karakter.</h2>
                   </div>
 
                   {/* search and filter */}
                   <div className='w-full flex justify-between'>
-                     <div className='w-fit flex gap-2 items-center'>
-                        <div className="relative w-full max-w-[200px]">
+                     <div className='w-full flex gap-2 items-center'>
+                        <div className="relative w-full sm:max-w-[200px]">
                            <Input
                               value={searchKey}
                               onChange={(e) => {
@@ -94,12 +94,11 @@ const BausastraSaku = () => {
                            ))
                         ) : (
                            <p>Kata tidak ditemukan</p>
-                        ) : (
-                           [...Array(5).map((_, index) => (
-                              <Skeleton key={index} className='w-72 h-28'/>
-                           ))]
-                        )
-                     }
+                     ) : (
+                        [...Array(5)].map((_, index) => (
+                           <Skeleton key={index} className='w-full h-28'/>
+                        ))
+                     )}
                   </div>
 
                   <div className='w-full my-5 flex justify-center'>

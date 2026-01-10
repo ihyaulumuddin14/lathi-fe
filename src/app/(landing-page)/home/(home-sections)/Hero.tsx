@@ -95,7 +95,7 @@ const Hero = ({ verified }: { verified?: boolean }) => {
           </TransitionLink>
         </div>
         <div className="w-full h-fit flex justify-center md:col-span-2 order-2 md:order-3 overflow-hidden">
-          <p ref={heroParagraphRef} className="w-full max-w-lg md:pl-20 text-lg">
+          <p ref={heroParagraphRef} className="w-full max-w-lg md:pl-20 text-sm sm:text-lg">
             Simulasi interaktif untuk menaklukkan Bahasa Jawa Krama Inggil. Ubah
             rasa canggungmu menjadi <i>unggah-ungguh</i> yang berkelas.
             <i>
@@ -114,7 +114,7 @@ const Hero = ({ verified }: { verified?: boolean }) => {
         className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce overflow-visible flex flex-col items-center gap-1"
       >
         <Mouse size={40} />
-        <p className="font-extralight">Jelajahi Lathi</p>
+        <p className="font-extralight text-sm sm:text-md">Jelajahi Lathi</p>
       </div>
     </section>
   );

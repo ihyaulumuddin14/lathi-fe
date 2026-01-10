@@ -74,7 +74,7 @@ const Profile = () => {
             <div className='bg-[url(/bg_hero.webp)] bg-fixed w-full h-64 opacity-20 mask-b-from-97% z-0'/>
 
             {/* wrapper */}
-            <div className='w-full max-w-6xl h-full mx-auto relative px-[5vw]'>
+            <div className='w-full max-w-6xl h-full mx-auto relative px-[6vw]'>
                <main className="w-full h-fit relative grid grid-cols-1 md:grid-cols-2 gap-5">
                   <header className="text-4xl w-full font-bold text-center md:text-left absolute -top-35">Profil</header>
 
@@ -146,7 +146,7 @@ const Profile = () => {
                            <span className="text-2xl font-extrabold">
                               {!user ? <Skeleton className="w-12 h-10"/> : <span>{user?.stats?.completed_chapters}</span>}
                            </span>
-                           <p className="lowercase">Cerita Tamat</p>
+                           <p className="text-sm sm:text-base lowercase">Cerita Tamat</p>
                         </div>
 
                         {/* progress percent */}
@@ -154,7 +154,7 @@ const Profile = () => {
                            <span className="text-2xl font-extrabold">
                               {!user ? <Skeleton className="w-12 h-10"/> : <span>{user?.stats?.progress_percent}{"%"}</span>}
                            </span>
-                           <p className="lowercase whitespace-nowrap">progres cerita</p>
+                           <p className="text-sm sm:text-base lowercase whitespace-nowrap">progres cerita</p>
                         </div>
 
                         {/* collected vocabs */}
@@ -162,7 +162,7 @@ const Profile = () => {
                            <span className="text-2xl font-extrabold">
                               {!user ? <Skeleton className="w-12 h-10"/> : <span>{user?.stats?.collected_vocabs}</span>}
                            </span>
-                           <p className="lowercase whitespace-nowrap">kata ditemukan</p>
+                           <p className="text-sm sm:text-base lowercase whitespace-nowrap">kata ditemukan</p>
                         </div>
                      </div>
                   </article>
@@ -217,7 +217,7 @@ const Profile = () => {
                                           <span className="text-3xl font-extrabold">
                                              {!user ? <Skeleton className="h-12 aspect-square"/> : <span>{user?.leaderboard_info?.rank}</span>}
                                           </span>
-                                          <p>Peringkat</p>
+                                          <p className="text-sm sm:text-base">Peringkat</p>
                                        </div>
                                     </div>
 
@@ -228,7 +228,7 @@ const Profile = () => {
                                           <span className="text-3xl font-extrabold">
                                              {!user ? <Skeleton className="h-12 w-15"/> : <span>{user?.leaderboard_info?.score}</span>}
                                           </span>
-                                          <p>Skor</p>
+                                          <p className="text-sm sm:text-base">Skor</p>
                                        </div>
                                     </div>
                                  </div>
@@ -270,8 +270,8 @@ const Profile = () => {
 
                   <article className="w-full">
                      <h2 className="text-lg font-bold text-destructive mb-1">Hapus Akun</h2>
-                     <hr className="border-b border-b-muted border-0"/>
-                     <p className="text-muted-foreground mb-5">Ketika kamu menghapus akun, kamu tidak dapat mengurungkan aksi dan mengembalikan akun yang telah terdaftar. Mohon berhati-hati.</p>
+                     <hr className="border-b border-b-muted border-0 my-3"/>
+                     <p className="text-sm sm:text-base text-muted-foreground mb-5">Ketika kamu menghapus akun, kamu tidak dapat mengurungkan aksi dan mengembalikan akun yang telah terdaftar. Mohon berhati-hati.</p>
 
                      <Button onClick={() => setIsOpen(true)} variant={"destructive"} className="font-bold">Hapus Akun</Button>
                   </article>

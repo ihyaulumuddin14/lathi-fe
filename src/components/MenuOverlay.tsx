@@ -57,7 +57,7 @@ const MenuOverlay = () => {
     <section
       ref={menuRef}
       className={`
-        bg-primary inset-0 fixed z-48 ${isOpenMenu ? "" : "pointer-events-none"}
+        bg-primary inset-0 fixed z-47 ${isOpenMenu ? "" : "pointer-events-none"}
         flex justify-center items-center transition-all duration-1500
       `}
     >

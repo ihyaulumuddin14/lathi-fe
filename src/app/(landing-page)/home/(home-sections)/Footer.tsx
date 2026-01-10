@@ -94,7 +94,7 @@ const Footer = () => {
         <p className="text-primary-foreground tracking-widest sm:col-span-2">Copyright &copy; 2025 Lathi</p>
       </footer>
 
-      <article id="team" className="w-full h-fit p-[3vw] flex flex-col gap-5">
+      <article id="team" className="w-full h-fit p-[6vw] flex flex-col gap-5">
         <header className="little-title uppercase text-left flex gap-2">
           <ChevronLast />
           Tim Pengembang
@@ -107,7 +107,7 @@ const Footer = () => {
             </div>
             <div className="w-full">
               <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Ihya&apos; Ulumuddin</h3>
-              <p className="text-md lg:text-xl leading-10">Frontend Developer</p>
+              <p className="text-sm md:text-md lg:text-xl leading-10">Frontend Developer</p>
             </div>
           </div>
           <div className="w-full h-fit img-team flex gap-3">
@@ -116,7 +116,7 @@ const Footer = () => {
             </div>
             <div className="w-full">
               <h3 className="font-extrabold mt-3 text-lg lg:text-2xl leading-5">Muhammad Hafizh Faiqunnabil</h3>
-              <p className="text-md lg:text-xl leading-10">Backend Developer</p>
+              <p className="text-sm md:text-md lg:text-xl leading-10">Backend Developer</p>
             </div>
           </div>
         </main>

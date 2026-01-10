@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function RulesPage() {
   return (
-   <section className='pt-10 lg:pt-40 p-[5vw] w-full h-fit flex flex-col items-center lg:items-start xl:items-center gap-15'>
+   <section className='pt-10 lg:pt-40 p-[6vw] w-full h-fit flex flex-col items-center lg:items-start xl:items-center gap-15'>
       <h1 className='font-extrabold text-3xl lg:text-5xl xl:text-center text-secondary w-fit bg-primary px-5 py-3 rounded-xl -rotate-3 shadow-xl shadow-accent-foreground'>Panduan & Aturan</h1>
       
       {/* description */}

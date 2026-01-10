@@ -60,7 +60,7 @@ const Teaser = () => {
         duration: 1
       }, "start").to(".img", {
         yPercent: -50,
-        autoAlpha: 0.3,
+        autoAlpha: 0,
         scale: 0.5,
         duration: 1,
         ease: "sine.inOut"
@@ -77,20 +77,20 @@ const Teaser = () => {
   }, [])
 
   return (
-    <section id="teaser" className="section-wrapper relative z-1 bg-background p-[3vw] flex flex-col justify-center items-center gap-4">
-      <h2 className="uppercase text-center font-bold text-lg">Misi Utama:</h2>
-      <h1 ref={teaserTitleRef} className="uppercase text-center text-4xl sm:text-6xl md:text-7xl xl:text-8xl leading-9 sm:leading-12 md:leading-14 xl:leading-20 font-extrabold tracking-tighter overflow-hidden origin-top z-2">Sowan <br /> Calon Mertua</h1>
-      <p ref={teaserDescRef} className="mt-15 w-full max-w-md text-lg">
+    <section id="teaser" className="section-wrapper relative z-1 bg-background p-[6vw] flex flex-col justify-center items-center gap-1 sm:gap-4">
+      <h2 className="uppercase text-center font-bold text-lg opacity-60">Misi Utama:</h2>
+      <h1 ref={teaserTitleRef} className="uppercase text-center text-3xl sm:text-5xl md:text-7xl xl:text-8xl leading-9 sm:leading-12 md:leading-14 xl:leading-20 font-extrabold tracking-tighter overflow-hidden origin-top z-2">Sowan <br /> Calon Mertua</h1>
+      <p ref={teaserDescRef} className="mt-15 w-full max-w-md text-sm sm:text-md lg:text-lg">
         Bayangkan kamu duduk di ruang tamu Joglo, berhadapan dengan Bapaknya pacarmu yang <i>killer</i>.
         Salah satu kata, restu melayang. <br /><br />
         <strong>Lathi </strong> melatihmu menghadapi situasi <i>high-stakes </i> seperti ini tanpa risiko nyata. 
         Salah di sini bisa diulang, salah di dunia nyata? <i>Ajum jum..</i>
       </p>
 
-      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute top-20 left-10 z-1 img"/>
-      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute bottom-10 left-5 z-1 img"/>
-      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute bottom-5 right-0 z-1 img"/>
-      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute top-0 right-10 z-1 img"/>
+      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute opacity-20 top-20 left-10 z-1 img"/>
+      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute opacity-20 bottom-10 left-5 z-1 img"/>
+      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute opacity-20 bottom-5 right-0 z-1 img"/>
+      <Image src={"/logo.png"} height={200} width={200} alt="logo" className="absolute opacity-20 top-0 right-10 z-1 img"/>
     </section>
   )
 };

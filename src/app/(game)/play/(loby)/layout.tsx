@@ -58,7 +58,7 @@ const LobyLayout = ({ children }: { children: React.ReactNode }) => {
 
             {/* WRAPPER NAV MENU */}
             <div ref={lobyContentRef} className="section-wrapper relative">
-               <nav className="w-full lg:max-w-sm h-[40vh] lg:h-screen absolute bottom-0 left-0 grid grid-cols-[1.5fr_1fr] lg:flex flex-col gap-4 items-center p-[3vw]">
+               <nav className="w-full lg:max-w-sm h-[40vh] lg:h-screen absolute bottom-0 left-0 grid grid-cols-[1.5fr_1fr] lg:flex flex-col gap-4 items-center p-[6vw]">
                   <div className="w-full h-full absolute bg-accent-foreground/70 mask-t-from-90% lg:mask-y-from-50%"/>
                   {/* LOGO */}
                   <Image src={"/logo.png"} alt="logo" width={200} height={200} className="hidden lg:block"/>
