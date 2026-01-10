@@ -11,7 +11,6 @@ import { useSession } from "@/hooks/useSession";
 import { Chapter } from "@/schema/GameSchema";
 import { useGameInfo } from "@/stores/useGameInfo";
 import { X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { toast } from "sonner";
 import Loader from "../Loader";
@@ -74,7 +73,7 @@ const ChapterInfo = () => {
                   Bagian {chapters.find(chapter => chapter.id === selectedChapterId)?.order_index}
                </h2>
                {chapter && (
-                  <img src={(chapter && chapter.cover_image_url) ?? ""} alt="chapter_image" className="rounded-full z-0 object-cover w-full"/>
+                  <img src={(chapter && chapter.cover_image_url) ?? ""} alt="chapter_image" className="rounded-full aspect-square z-0 object-cover w-full"/>
                )}
                {sessionData && (
                   <p

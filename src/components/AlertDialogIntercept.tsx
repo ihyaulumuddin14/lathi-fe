@@ -194,7 +194,7 @@ const AlertDialogIntercept = () => {
               <>
                 Selangkah lagi untuk menjadi &quot;Mantu Idaman&quot;. Buat
                 akunmu sekarang agar setiap kata krama yang kamu temukan bisa
-                tersimpan.
+                tersimpan. <br /><br /> Pastikan menggunakan email yang valid ya.
               </>
             )}
 

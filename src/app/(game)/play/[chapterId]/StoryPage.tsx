@@ -10,7 +10,6 @@ import { useGameInfo } from "@/stores/useGameInfo"
 import { useTypingAnimation } from "@/stores/useTypingAnimation"
 import { AxiosError } from "axios"
 import { AnimatePresence, motion } from "motion/react"
-import Image from "next/image"
 import { useCallback, useEffect, useReducer, useState } from "react"
 import { toast } from "sonner"
 import CharDialog from "./CharDialog"
@@ -131,7 +130,6 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
          }
 
          if (response.data.is_game_over || response.data.is_completed) {
-            console.log("ending message", response.data.message)
             setEndingMessage(response.data.message)
          }
       } catch (error) {
@@ -216,7 +214,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 left-0 mask-b-from-70`}>
                         <img
                            src={(slide && slide?.characters[0].image_url) ?? ""}
-                           alt="char_img" className="object-cover w-full"
+                           alt="char_img_1" className="object-cover w-full"
                            />
                   </motion.div>
                )}
@@ -238,7 +236,7 @@ export default function StoryPage({ shouldFetch, mode }: { shouldFetch: boolean,
                      className={`h-[60vh] aspect-3/5 absolute bottom-0 right-0 mask-b-from-70%`}>
                         <img
                            src={(slide && slide?.characters[1].image_url) ?? ""}
-                           alt="char_img_1" className="w-full object-cover"
+                           alt="char_img_2" className="w-full object-cover"
                            />
                   </motion.div>
                )}

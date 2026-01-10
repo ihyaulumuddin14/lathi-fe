@@ -6,6 +6,7 @@ import MenuOverlay from "@/components/MenuOverlay";
 import { refreshService } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { animatePageIn } from "@/utils/animation";
+import { AxiosError } from "axios";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -25,12 +26,14 @@ const Template = ({ children }: { children: React.ReactNode }) => {
 
    useEffect(() => {
       const fetchRefresh = async () => {
-         const response = await refreshService()
-
-         if (response.success) {
-            setAccessToken(response.data.access_token)
-            // toast.success(response.message)
-         }
+         try {
+            const response = await refreshService()
+   
+            if (response.success) {
+               setAccessToken(response.data.access_token)
+               // toast.success(response.message)
+            }
+         } catch {}
       }
 
       if (!accessToken) fetchRefresh()
